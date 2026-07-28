@@ -391,8 +391,12 @@ export default function App() {
           )}
 
           {activeSection === 'partners' && (
-            <div className="py-12 bg-white">
-              <PartnersBanner lang={lang} />
+            <div className="py-8 bg-slate-50">
+              <PartnersBanner
+                creators={creatorsMockData}
+                onSelectCreator={(c) => setSelectedCreator(c)}
+                lang={lang}
+              />
             </div>
           )}
         </div>
