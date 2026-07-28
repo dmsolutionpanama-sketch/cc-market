@@ -27,6 +27,9 @@ const categoriesList: (Category | 'All')[] = [
 
 const countriesList = [
   'All',
+  'Panamá',
+  'Nicaragua',
+  'Venezuela',
   'El Salvador',
   'Guatemala',
   'Honduras',

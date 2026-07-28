@@ -12,16 +12,19 @@ interface TopRankingSectionProps {
 type RankingTab = 'marketValue' | 'acv' | 'followers' | 'engagement' | 'brandScore';
 
 const COUNTRIES_LIST = [
-  { country: 'España', code: 'ES', flagEmoji: '🇪🇸' },
-  { country: 'Andorra', code: 'AD', flagEmoji: '🇦🇩' },
+  { country: 'Panamá', code: 'PA', flagEmoji: '🇵🇦' },
+  { country: 'Nicaragua', code: 'NI', flagEmoji: '🇳🇮' },
+  { country: 'Venezuela', code: 'VE', flagEmoji: '🇻🇪' },
+  { country: 'El Salvador', code: 'SV', flagEmoji: '🇸🇻' },
   { country: 'Guatemala', code: 'GT', flagEmoji: '🇬🇹' },
+  { country: 'España', code: 'ES', flagEmoji: '🇪🇸' },
   { country: 'México', code: 'MX', flagEmoji: '🇲🇽' },
   { country: 'Argentina', code: 'AR', flagEmoji: '🇦🇷' },
   { country: 'Colombia', code: 'CO', flagEmoji: '🇨🇴' },
   { country: 'Estados Unidos', code: 'US', flagEmoji: '🇺🇸' },
   { country: 'Chile', code: 'CL', flagEmoji: '🇨🇱' },
-  { country: 'Panamá', code: 'PA', flagEmoji: '🇵🇦' },
   { country: 'Perú', code: 'PE', flagEmoji: '🇵🇪' },
+  { country: 'Andorra', code: 'AD', flagEmoji: '🇦🇩' },
 ];
 
 export const TopRankingSection: React.FC<TopRankingSectionProps> = ({
@@ -65,14 +68,14 @@ export const TopRankingSection: React.FC<TopRankingSectionProps> = ({
           ...base,
           id: `${base.id}-top100-rank-${rankIndex}`,
           name: cycle === 0 ? base.name : `${base.name} (V${cycle + 1})`,
-          country: countryObj.country,
-          countryCode: countryObj.code,
-          flagEmoji: countryObj.flagEmoji,
+          country: cycle === 0 ? base.country : countryObj.country,
+          countryCode: cycle === 0 ? base.countryCode : countryObj.code,
+          flagEmoji: cycle === 0 ? base.flagEmoji : countryObj.flagEmoji,
           marketValueEur: marketVal,
           totalFollowers: followers,
           acv: acvVal,
           engagementRate: engagement,
-          starRating: stars,
+          starRating: cycle === 0 ? (base.starRating || 5.0) : stars,
         });
 
         rankIndex++;

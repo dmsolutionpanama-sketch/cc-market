@@ -124,6 +124,40 @@ export interface Creator {
   joinedYear: number;
 }
 
+export type CreatorApprovalStatus = 'approved' | 'pending' | 'rejected';
+
+export interface PaymentDetails {
+  paymentType: 'bank_transfer' | 'paypal' | 'zelle_yappi';
+  bankName?: string;
+  accountNumber?: string;
+  ibanSwift?: string;
+  accountHolderName: string;
+  taxIdOrRuc: string; // Cédula, RUC, DNI o Tax ID
+  paypalEmail?: string;
+  phoneZelleYappi?: string;
+  country: string;
+}
+
+export interface CreatorUserAccount {
+  id: string;
+  email: string;
+  password?: string;
+  creatorId: string;
+  status: CreatorApprovalStatus;
+  disclaimerAccepted: boolean;
+  disclaimerAcceptedAt?: string;
+  paymentDetails: PaymentDetails;
+  registeredAt: string;
+  updatedAt: string;
+}
+
+export interface AuthUserSession {
+  isLoggedIn: boolean;
+  role: 'creator' | 'admin';
+  userAccount?: CreatorUserAccount;
+  creatorProfile?: Creator;
+}
+
 export interface CreatorNewsItem {
   id: string;
   title: string;
@@ -139,6 +173,7 @@ export interface CreatorNewsItem {
   sourceLogo?: string;
   externalUrl?: string;
   isRssLive?: boolean;
+  fullContent?: string;
 }
 
 export interface FilterState {

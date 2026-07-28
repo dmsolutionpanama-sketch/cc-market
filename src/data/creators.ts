@@ -631,6 +631,614 @@ export const creatorsMockData: Creator[] = [
     recentBrands: ['Corona', 'Pillofon', 'Uber Eats', 'American Express'],
     bio: 'Youtuber de viajes más grande de habla hispana, empresario y creador de contenido cultural y de aventura.',
     joinedYear: 2012
+  },
+  {
+    id: 'creator-yenvideo',
+    name: 'Yenvideo',
+    handle: '@yenvideo',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400',
+    country: 'Panamá',
+    countryCode: 'PA',
+    flagEmoji: '🇵🇦',
+    ageRange: '24 - 28 años',
+    primaryPlatform: 'Instagram',
+    platforms: [
+      { platform: 'Instagram', followers: '1.3M', followersCount: 1300000, url: 'https://instagram.com/yenvideo' },
+      { platform: 'TikTok', followers: '820K', followersCount: 820000, url: 'https://tiktok.com/@yenvideo' },
+      { platform: 'YouTube', followers: '450K', followersCount: 450000, url: 'https://youtube.com/@yenvideo' }
+    ],
+    category: 'Entretenimiento',
+    tags: ['Host Reality', 'Parking de Yenvideo', 'Actor', 'Humor', 'Panamá'],
+    marketValueEur: 3500000,
+    marketValueChangePct: 25.4,
+    acv: 95000,
+    totalFollowers: 2570000,
+    engagementRate: 9.8,
+    verified: true,
+    auditedStatus: 'Top Tier',
+    starRating: 5.0,
+    reviewCount: 38,
+    isTrending: true,
+    trendingReason: '🔥 Host de "Parking de Yenvideo" & 1.3M seguidores auditados en Instagram',
+    sponsorshipRates: {
+      sponsoredPost: 500,
+      videoIntegration: 1200,
+      monthlyAmbassador: 4500
+    },
+    mediaKitPacks: [
+      {
+        title: 'Pack Reel + Secuencia Stories',
+        priceUSD: 850,
+        description: 'Exposición masiva en Instagram Reels con la audiencia joven de Panamá.',
+        deliverables: ['1 Reel de alta retención', '3 Stories con sticker de enlace', 'Mención directa en pie de foto'],
+        popular: true
+      },
+      {
+        title: 'Integración Especial "Parking de Yenvideo"',
+        priceUSD: 2500,
+        description: 'Presencia estelar de marca dentro del show reality "Parking de Yenvideo".',
+        deliverables: ['Mención y product placement en el episodio', 'Reel promocional exclusivo', 'Secuencia de 5 historias']
+      }
+    ],
+    brandWorkHistory: [
+      { brandName: 'Toyota Panamá', durationMonths: '12 meses', campaignType: 'Embajador de Marca', year: '2025 - 2026', satisfaction: 'Excelente' },
+      { brandName: 'Claro Panamá', durationMonths: '8 meses', campaignType: 'Campañas de Verano & Tech', year: '2025', satisfaction: 'Excelente' },
+      { brandName: 'Cerveza Panamá', durationMonths: '6 meses', campaignType: 'Eventos & Show Reality', year: '2024 - 2025', satisfaction: 'Excelente' }
+    ],
+    brandRating: {
+      trafficLight: 'green',
+      statusText: '5.0 ⭐ Valoración Máxima - 100% Cumplimiento en Entregables',
+      commitmentScore: 100,
+      starRating: 5.0,
+      totalReviews: 38,
+      totalCampaigns: 28,
+      reviews: [
+        { brandName: 'Toyota Panamá', rating: 'green', comment: 'Gran carisma e impacto masivo en audiencia panameña.', date: '2026-02-05', verifiedBrand: true },
+        { brandName: 'Claro', rating: 'green', comment: 'Excelente engagement y puntualidad en todos los reels.', date: '2025-11-20', verifiedBrand: true }
+      ]
+    },
+    monthlyViews: 12500000,
+    avgLikesPerPost: 110000,
+    demographics: {
+      gender: { male: 52, female: 46, other: 2 },
+      topAgeGroup: '18-24',
+      ageBreakdown: [
+        { range: '13-17', percentage: 20 },
+        { range: '18-24', percentage: 54 },
+        { range: '25-34', percentage: 20 },
+        { range: '35+', percentage: 6 }
+      ],
+      topCountries: [
+        { country: 'Panamá', code: 'PA', percentage: 72 },
+        { country: 'Costa Rica', code: 'CR', percentage: 12 },
+        { country: 'Estados Unidos', code: 'US', percentage: 10 },
+        { country: 'Colombia', code: 'CO', percentage: 6 }
+      ]
+    },
+    valuationHistory: [
+      { year: '2023', valueInMillions: 0.9 },
+      { year: '2024', valueInMillions: 1.8 },
+      { year: '2025', valueInMillions: 2.7 },
+      { year: '2026', valueInMillions: 3.5 }
+    ],
+    recentBrands: ['Toyota Panamá', 'Digicel', 'Claro', 'Cerveza Panamá', 'KFC'],
+    bio: 'Actor, presentador y creador de "Parking de Yenvideo". Creador número 1 de reality shows y entretenimiento juvenil en Panamá con 1.3M de seguidores en Instagram.',
+    joinedYear: 2019
+  },
+  {
+    id: 'creator-jr-comediante',
+    name: 'JR Comediante',
+    handle: '@jr_comediante_',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400',
+    country: 'Nicaragua',
+    countryCode: 'NI',
+    flagEmoji: '🇳🇮',
+    ageRange: '30 - 36 años',
+    primaryPlatform: 'TikTok',
+    platforms: [
+      { platform: 'TikTok', followers: '10.1M', followersCount: 10100000, url: 'https://tiktok.com/@jr_comediante_' },
+      { platform: 'Instagram', followers: '2.3M', followersCount: 2300000, url: 'https://instagram.com/jr_comediante_' },
+      { platform: 'YouTube', followers: '3.5M', followersCount: 3500000, url: 'https://youtube.com/@jrcomediante' },
+      { platform: 'Facebook', followers: '4.8M', followersCount: 4800000, url: 'https://facebook.com/jrcomediante' }
+    ],
+    category: 'Reviews & Humor',
+    tags: ['Comediante', '10.1M TikTok', 'Real Estelí FC', 'Sketches', 'Parodias'],
+    marketValueEur: 6800000,
+    marketValueChangePct: 32.1,
+    acv: 210000,
+    totalFollowers: 20700000,
+    engagementRate: 11.2,
+    verified: true,
+    auditedStatus: 'Top Tier',
+    starRating: 5.0,
+    reviewCount: 48,
+    isTrending: true,
+    trendingReason: '🔥 10.1 Millones en TikTok & 2.3M en Instagram - Embajador de Real Estelí FC',
+    sponsorshipRates: {
+      sponsoredPost: 1200,
+      videoIntegration: 2800,
+      monthlyAmbassador: 8500
+    },
+    mediaKitPacks: [
+      {
+        title: 'Combo TikTok + Instagram Reel Viral',
+        priceUSD: 2500,
+        description: 'Exposición total a más de 12.4M de seguidores combinados en TikTok e Instagram.',
+        deliverables: ['1 Video TikTok de comedia', '1 Reel en Instagram', '3 Stories con sticker de oferta'],
+        popular: true
+      },
+      {
+        title: 'Campaña Anual Embajador de Marca',
+        priceUSD: 8500,
+        description: 'Presencia continua en parodias, eventos y reels de comedia.',
+        deliverables: ['2 Videos mensuales en TikTok/Reels', 'Mención en bio', 'Uso comercial de marca']
+      }
+    ],
+    brandWorkHistory: [
+      { brandName: 'Real Estelí FC', durationMonths: '24 meses', campaignType: 'Embajador Oficial', year: '2024 - 2026', satisfaction: 'Excelente' },
+      { brandName: 'Claro Nicaragua', durationMonths: '12 meses', campaignType: 'Comedia & Telecom', year: '2025', satisfaction: 'Excelente' },
+      { brandName: 'Flor de Caña', durationMonths: '10 meses', campaignType: 'Eventos & Fiestas', year: '2024 - 2025', satisfaction: 'Excelente' }
+    ],
+    brandRating: {
+      trafficLight: 'green',
+      statusText: '5.0 ⭐ Valoración Máxima - Liderazgo en Retorno y Humor',
+      commitmentScore: 100,
+      starRating: 5.0,
+      totalReviews: 48,
+      totalCampaigns: 42,
+      reviews: [
+        { brandName: 'Real Estelí FC', rating: 'green', comment: 'El comediante número 1 de la región. Excelente nivel de conversión.', date: '2026-01-28', verifiedBrand: true },
+        { brandName: 'Claro Nicaragua', rating: 'green', comment: 'Creatividad desbordante e interacción masiva en cada sketch.', date: '2025-12-10', verifiedBrand: true }
+      ]
+    },
+    monthlyViews: 48000000,
+    avgLikesPerPost: 290000,
+    demographics: {
+      gender: { male: 58, female: 41, other: 1 },
+      topAgeGroup: '18-24',
+      ageBreakdown: [
+        { range: '13-17', percentage: 18 },
+        { range: '18-24', percentage: 52 },
+        { range: '25-34', percentage: 22 },
+        { range: '35+', percentage: 8 }
+      ],
+      topCountries: [
+        { country: 'Nicaragua', code: 'NI', percentage: 58 },
+        { country: 'Costa Rica', code: 'CR', percentage: 18 },
+        { country: 'Estados Unidos', code: 'US', percentage: 14 },
+        { country: 'Honduras', code: 'HN', percentage: 10 }
+      ]
+    },
+    valuationHistory: [
+      { year: '2023', valueInMillions: 2.2 },
+      { year: '2024', valueInMillions: 3.8 },
+      { year: '2025', valueInMillions: 5.2 },
+      { year: '2026', valueInMillions: 6.8 }
+    ],
+    recentBrands: ['Real Estelí FC', 'Claro Nicaragua', 'Flor de Caña', 'Tigo', 'Pepsi'],
+    bio: 'Comediante y creador de contenido de humor líder en Centroamérica con más de 10 Millones de seguidores en TikTok y 2.3M en Instagram. Embajador de Real Estelí FC.',
+    joinedYear: 2016
+  },
+  {
+    id: 'creator-marko',
+    name: 'Marko',
+    handle: '@markomusica',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400',
+    country: 'Venezuela',
+    countryCode: 'VE',
+    flagEmoji: '🇻🇪',
+    ageRange: '30 - 35 años',
+    primaryPlatform: 'Instagram',
+    platforms: [
+      { platform: 'Instagram', followers: '1.5M', followersCount: 1500000, url: 'https://instagram.com/markomusica' },
+      { platform: 'TikTok', followers: '3.2M', followersCount: 3200000, url: 'https://tiktok.com/@marko' },
+      { platform: 'YouTube', followers: '1.8M', followersCount: 1800000, url: 'https://youtube.com/marko' }
+    ],
+    category: 'Reviews & Humor',
+    tags: ['Comedia Viral', 'Sketches', 'Humor LatAm', 'Stand Up', 'Showman'],
+    marketValueEur: 5200000,
+    marketValueChangePct: 19.4,
+    acv: 140000,
+    totalFollowers: 6500000,
+    engagementRate: 10.5,
+    verified: true,
+    auditedStatus: 'Top Tier',
+    starRating: 5.0,
+    reviewCount: 42,
+    isTrending: true,
+    trendingReason: '🚀 Comedia viral récord en Instagram Reels & Shows Sold Out',
+    sponsorshipRates: {
+      sponsoredPost: 1500,
+      videoIntegration: 3500,
+      monthlyAmbassador: 12000
+    },
+    mediaKitPacks: [
+      {
+        title: 'Sketch de Comedia Personalizado + Reel',
+        priceUSD: 3500,
+        description: 'Guion cómico original integrando el producto de manera orgánica y viral.',
+        deliverables: ['1 Reel de comedia de alta producción', '2 Stories promocionales', 'Mención en pie de foto'],
+        popular: true
+      }
+    ],
+    brandWorkHistory: [
+      { brandName: 'Toyota LatAm', durationMonths: '12 meses', campaignType: 'Comedia & Embajador', year: '2025', satisfaction: 'Excelente' },
+      { brandName: 'Goya Foods', durationMonths: '8 meses', campaignType: 'Campañas Hispanas US', year: '2024 - 2025', satisfaction: 'Excelente' }
+    ],
+    brandRating: {
+      trafficLight: 'green',
+      statusText: '5.0 ⭐ Excelente Conversión & Rating Comedia',
+      commitmentScore: 100,
+      starRating: 5.0,
+      totalReviews: 42,
+      totalCampaigns: 36,
+      reviews: [
+        { brandName: 'Toyota LatAm', rating: 'green', comment: 'Humor universal que conecta inmediatamente con todo el público hispano.', date: '2026-02-01', verifiedBrand: true }
+      ]
+    },
+    monthlyViews: 35000000,
+    avgLikesPerPost: 210000,
+    demographics: {
+      gender: { male: 46, female: 52, other: 2 },
+      topAgeGroup: '18-24',
+      ageBreakdown: [
+        { range: '13-17', percentage: 15 },
+        { range: '18-24', percentage: 48 },
+        { range: '25-34', percentage: 27 },
+        { range: '35+', percentage: 10 }
+      ],
+      topCountries: [
+        { country: 'Estados Unidos', code: 'US', percentage: 38 },
+        { country: 'Venezuela', code: 'VE', percentage: 28 },
+        { country: 'Colombia', code: 'CO', percentage: 18 },
+        { country: 'España', code: 'ES', percentage: 16 }
+      ]
+    },
+    valuationHistory: [
+      { year: '2023', valueInMillions: 1.8 },
+      { year: '2024', valueInMillions: 3.2 },
+      { year: '2025', valueInMillions: 4.4 },
+      { year: '2026', valueInMillions: 5.2 }
+    ],
+    recentBrands: ['Toyota LatAm', 'Banesco', 'Goya Foods', 'Univision'],
+    bio: 'Referente global de la comedia viral en español, creador de sketches icónicos y espectáculos cómicos internacionales con 1.5M en Instagram.',
+    joinedYear: 2017
+  },
+  {
+    id: 'creator-duckins',
+    name: 'Duckins Jacques',
+    handle: '@duckinss',
+    avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=400',
+    country: 'Estados Unidos',
+    countryCode: 'US',
+    flagEmoji: '🇺🇸',
+    ageRange: '25 - 30 años',
+    primaryPlatform: 'Instagram',
+    platforms: [
+      { platform: 'Instagram', followers: '764K', followersCount: 764000, url: 'https://instagram.com/duckinss' },
+      { platform: 'TikTok', followers: '520K', followersCount: 520000, url: 'https://tiktok.com/@duckinss' }
+    ],
+    category: 'Deportes',
+    tags: ['Artista', 'Béisbol', 'The Bravest Kid', 'Fitness', 'Lifestyle'],
+    marketValueEur: 2800000,
+    marketValueChangePct: 17.5,
+    acv: 68000,
+    totalFollowers: 1284000,
+    engagementRate: 8.7,
+    verified: true,
+    auditedStatus: 'Verified Audit',
+    starRating: 5.0,
+    reviewCount: 26,
+    isTrending: true,
+    trendingReason: '⚾️ 764K seguidores en Instagram - Contenido de Béisbol & Estilo de Vida',
+    sponsorshipRates: {
+      sponsoredPost: 450,
+      videoIntegration: 950,
+      monthlyAmbassador: 3800
+    },
+    mediaKitPacks: [
+      {
+        title: 'Pack Atleta & Lifestyle Reel',
+        priceUSD: 950,
+        description: 'Video dinámico de entrenamiento, béisbol y ropa deportiva.',
+        deliverables: ['1 Reel de alta calidad HD', '2 Stories con enlace de compra', 'Tag de marca'],
+        popular: true
+      }
+    ],
+    brandWorkHistory: [
+      { brandName: 'Rawlings', durationMonths: '12 meses', campaignType: 'Equipamiento Deportivo', year: '2025 - 2026', satisfaction: 'Excelente' },
+      { brandName: 'Wilson Baseball', durationMonths: '8 meses', campaignType: 'Guantes & Béisbol', year: '2025', satisfaction: 'Excelente' }
+    ],
+    brandRating: {
+      trafficLight: 'green',
+      statusText: '5.0 ⭐ 100% Evaluación Positiva de Marcas Deportivas',
+      commitmentScore: 100,
+      starRating: 5.0,
+      totalReviews: 26,
+      totalCampaigns: 20,
+      reviews: [
+        { brandName: 'Rawlings', rating: 'green', comment: 'Gran profesionalismo y estética impecable en contenido deportivo.', date: '2026-01-18', verifiedBrand: true }
+      ]
+    },
+    monthlyViews: 8500000,
+    avgLikesPerPost: 75000,
+    demographics: {
+      gender: { male: 65, female: 33, other: 2 },
+      topAgeGroup: '18-24',
+      ageBreakdown: [
+        { range: '13-17', percentage: 22 },
+        { range: '18-24', percentage: 50 },
+        { range: '25-34', percentage: 20 },
+        { range: '35+', percentage: 8 }
+      ],
+      topCountries: [
+        { country: 'Estados Unidos', code: 'US', percentage: 62 },
+        { country: 'Panamá', code: 'PA', percentage: 18 },
+        { country: 'República Dominicana', code: 'DO', percentage: 12 },
+        { country: 'México', code: 'MX', percentage: 8 }
+      ]
+    },
+    valuationHistory: [
+      { year: '2023', valueInMillions: 0.8 },
+      { year: '2024', valueInMillions: 1.5 },
+      { year: '2025', valueInMillions: 2.2 },
+      { year: '2026', valueInMillions: 2.8 }
+    ],
+    recentBrands: ['Rawlings', 'Wilson Baseball', 'Nike', 'Gatorade'],
+    bio: 'Artista, atleta y creador de contenido de béisbol y estilo de vida deportivo ("The bravest kid on the playground") con 764K seguidores en Instagram.',
+    joinedYear: 2020
+  },
+  {
+    id: 'creator-joshua-blake',
+    name: 'Joshua Blake',
+    handle: '@itssblakee',
+    avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=400',
+    country: 'Panamá',
+    countryCode: 'PA',
+    flagEmoji: '🇵🇦',
+    ageRange: '23 - 27 años',
+    primaryPlatform: 'Instagram',
+    platforms: [
+      { platform: 'Instagram', followers: '1M', followersCount: 1000000, url: 'https://instagram.com/itssblakee' },
+      { platform: 'TikTok', followers: '680K', followersCount: 680000, url: 'https://tiktok.com/@itssblakee' }
+    ],
+    category: 'Moda y Estilo',
+    tags: ['Creador de Reels', 'Panamá', 'Lifestyle', 'Eventos', 'Moda'],
+    marketValueEur: 3100000,
+    marketValueChangePct: 21.8,
+    acv: 82000,
+    totalFollowers: 1680000,
+    engagementRate: 9.4,
+    verified: true,
+    auditedStatus: 'Verified Audit',
+    starRating: 5.0,
+    reviewCount: 31,
+    isTrending: true,
+    trendingReason: '🔥 1 Millón de seguidores en Instagram & Tendencia en Reels de Panamá',
+    sponsorshipRates: {
+      sponsoredPost: 480,
+      videoIntegration: 1100,
+      monthlyAmbassador: 4200
+    },
+    mediaKitPacks: [
+      {
+        title: 'Pack Reels + Cobertura de Eventos',
+        priceUSD: 1100,
+        description: 'Presencia en eventos VIP y creación de Reels en alta calidad visual.',
+        deliverables: ['1 Reel cinematográfico', '3 Stories en vivo', 'Etiquetado de marca y enlace'],
+        popular: true
+      }
+    ],
+    brandWorkHistory: [
+      { brandName: 'Passline Panamá', durationMonths: '12 meses', campaignType: 'Eventos & Boleta Digital', year: '2025 - 2026', satisfaction: 'Excelente' },
+      { brandName: 'Puma Panamá', durationMonths: '6 meses', campaignType: 'Colecciones Streetwear', year: '2025', satisfaction: 'Excelente' }
+    ],
+    brandRating: {
+      trafficLight: 'green',
+      statusText: '5.0 ⭐ 100% Calificación de Excelencia de Marcas',
+      commitmentScore: 100,
+      starRating: 5.0,
+      totalReviews: 31,
+      totalCampaigns: 25,
+      reviews: [
+        { brandName: 'Passline', rating: 'green', comment: 'Ventas directas aceleradas gracias a sus historias y reels de eventos.', date: '2026-02-02', verifiedBrand: true }
+      ]
+    },
+    monthlyViews: 11200000,
+    avgLikesPerPost: 95000,
+    demographics: {
+      gender: { male: 48, female: 50, other: 2 },
+      topAgeGroup: '18-24',
+      ageBreakdown: [
+        { range: '13-17', percentage: 18 },
+        { range: '18-24', percentage: 56 },
+        { range: '25-34', percentage: 20 },
+        { range: '35+', percentage: 6 }
+      ],
+      topCountries: [
+        { country: 'Panamá', code: 'PA', percentage: 68 },
+        { country: 'Estados Unidos', code: 'US', percentage: 16 },
+        { country: 'Colombia', code: 'CO', percentage: 10 },
+        { country: 'Costa Rica', code: 'CR', percentage: 6 }
+      ]
+    },
+    valuationHistory: [
+      { year: '2023', valueInMillions: 0.8 },
+      { year: '2024', valueInMillions: 1.6 },
+      { year: '2025', valueInMillions: 2.4 },
+      { year: '2026', valueInMillions: 3.1 }
+    ],
+    recentBrands: ['Passline', 'Cerveza Corona', 'Puma Panamá', 'Samsung'],
+    bio: 'Creador de reels, eventos y lifestyle en Panamá con 1 Millón de seguidores en Instagram. Especialista en campañas de marca de alto impacto.',
+    joinedYear: 2021
+  },
+  {
+    id: 'creator-yosoyelpampa',
+    name: 'Yosoyelpampa',
+    handle: '@yosoyelpampa',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400',
+    country: 'Panamá',
+    countryCode: 'PA',
+    flagEmoji: '🇵🇦',
+    ageRange: '26 - 31 años',
+    primaryPlatform: 'Instagram',
+    platforms: [
+      { platform: 'Instagram', followers: '129K', followersCount: 129000, url: 'https://instagram.com/yosoyelpampa' },
+      { platform: 'TikTok', followers: '210K', followersCount: 210000, url: 'https://tiktok.com/@yosoyelpampa' },
+      { platform: 'Facebook', followers: '95K', followersCount: 95000, url: 'https://facebook.com/yosoyelpampa' }
+    ],
+    category: 'Reviews & Humor',
+    tags: ['Humor', 'Comedia', 'Panamá West', 'Reels', 'Vibras'],
+    marketValueEur: 1450000,
+    marketValueChangePct: 18.6,
+    acv: 42000,
+    totalFollowers: 434000,
+    engagementRate: 10.8,
+    verified: true,
+    auditedStatus: 'Verified Audit',
+    starRating: 5.0,
+    reviewCount: 22,
+    isTrending: true,
+    trendingReason: '🔥 129K seguidores en Instagram con alta interacción y comedia viral',
+    sponsorshipRates: {
+      sponsoredPost: 220,
+      videoIntegration: 480,
+      monthlyAmbassador: 1900
+    },
+    mediaKitPacks: [
+      {
+        title: 'Reel de Comedia + Stories en Vivo',
+        priceUSD: 480,
+        description: 'Humor panameño auténtico para destacar productos de consumo masivo.',
+        deliverables: ['1 Reel cómico de alta interacción', '2 Stories con stickers', 'Mención de marca'],
+        popular: true
+      }
+    ],
+    brandWorkHistory: [
+      { brandName: 'Super 99', durationMonths: '8 meses', campaignType: 'Promociones & Comedia', year: '2025', satisfaction: 'Excelente' },
+      { brandName: 'Cerveza Balboa', durationMonths: '6 meses', campaignType: 'Eventos & Fiestas', year: '2024 - 2025', satisfaction: 'Excelente' }
+    ],
+    brandRating: {
+      trafficLight: 'green',
+      statusText: '5.0 ⭐ 100% Calidad y Entregables Puntuales',
+      commitmentScore: 100,
+      starRating: 5.0,
+      totalReviews: 22,
+      totalCampaigns: 18,
+      reviews: [
+        { brandName: 'Super 99', rating: 'green', comment: 'Altísimo alcance orgánico y risas garantizadas con la audiencia.', date: '2026-01-12', verifiedBrand: true }
+      ]
+    },
+    monthlyViews: 4800000,
+    avgLikesPerPost: 38000,
+    demographics: {
+      gender: { male: 54, female: 44, other: 2 },
+      topAgeGroup: '18-24',
+      ageBreakdown: [
+        { range: '13-17', percentage: 16 },
+        { range: '18-24', percentage: 58 },
+        { range: '25-34', percentage: 20 },
+        { range: '35+', percentage: 6 }
+      ],
+      topCountries: [
+        { country: 'Panamá', code: 'PA', percentage: 82 },
+        { country: 'Costa Rica', code: 'CR', percentage: 8 },
+        { country: 'Estados Unidos', code: 'US', percentage: 6 },
+        { country: 'Colombia', code: 'CO', percentage: 4 }
+      ]
+    },
+    valuationHistory: [
+      { year: '2023', valueInMillions: 0.4 },
+      { year: '2024', valueInMillions: 0.8 },
+      { year: '2025', valueInMillions: 1.1 },
+      { year: '2026', valueInMillions: 1.45 }
+    ],
+    recentBrands: ['Super 99', 'Pío Pío', 'Cerveza Balboa', 'Cable & Wireless'],
+    bio: 'Creador de comedia, humor panameño y reels. "La cabeza más grande de Panamá - No entienden la puta vibra" con 129K en Instagram.',
+    joinedYear: 2021
+  },
+  {
+    id: 'creator-boanerges',
+    name: 'Boanerges Miranda',
+    handle: '@boanergesmiranda_',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400',
+    country: 'Nicaragua',
+    countryCode: 'NI',
+    flagEmoji: '🇳🇮',
+    ageRange: '24 - 28 años',
+    primaryPlatform: 'Instagram',
+    platforms: [
+      { platform: 'Instagram', followers: '125K', followersCount: 125000, url: 'https://instagram.com/boanergesmiranda_' },
+      { platform: 'TikTok', followers: '340K', followersCount: 340000, url: 'https://tiktok.com/@boanergesmiranda_' }
+    ],
+    category: 'Reviews & Humor',
+    tags: ['Humor', 'Reels', 'Nicaragua', 'Sketches', 'Contrataciones'],
+    marketValueEur: 1380000,
+    marketValueChangePct: 16.2,
+    acv: 38000,
+    totalFollowers: 465000,
+    engagementRate: 9.9,
+    verified: true,
+    auditedStatus: 'Verified Audit',
+    starRating: 5.0,
+    reviewCount: 18,
+    isTrending: true,
+    trendingReason: '🔥 125K en Instagram & 340K en TikTok - "Dios es Fiel"',
+    sponsorshipRates: {
+      sponsoredPost: 200,
+      videoIntegration: 450,
+      monthlyAmbassador: 1800
+    },
+    mediaKitPacks: [
+      {
+        title: 'Pack Reel de Comedia + Story',
+        priceUSD: 450,
+        description: 'Sketch de comedia nicaragüense auténtico para promocionar marcas.',
+        deliverables: ['1 Reel de comedia original', '2 Stories con sticker de llamada o WhatsApp'],
+        popular: true
+      }
+    ],
+    brandWorkHistory: [
+      { brandName: 'Claro Nicaragua', durationMonths: '8 meses', campaignType: 'Promociones & Redes', year: '2025', satisfaction: 'Excelente' }
+    ],
+    brandRating: {
+      trafficLight: 'green',
+      statusText: '5.0 ⭐ 100% Cumplimiento Impecable',
+      commitmentScore: 100,
+      starRating: 5.0,
+      totalReviews: 18,
+      totalCampaigns: 15,
+      reviews: [
+        { brandName: 'Claro Nicaragua', rating: 'green', comment: 'Muy buena receptividad y respuesta positiva del público.', date: '2026-01-20', verifiedBrand: true }
+      ]
+    },
+    monthlyViews: 4200000,
+    avgLikesPerPost: 35000,
+    demographics: {
+      gender: { male: 51, female: 47, other: 2 },
+      topAgeGroup: '18-24',
+      ageBreakdown: [
+        { range: '13-17', percentage: 18 },
+        { range: '18-24', percentage: 54 },
+        { range: '25-34', percentage: 22 },
+        { range: '35+', percentage: 6 }
+      ],
+      topCountries: [
+        { country: 'Nicaragua', code: 'NI', percentage: 76 },
+        { country: 'Costa Rica', code: 'CR', percentage: 12 },
+        { country: 'Estados Unidos', code: 'US', percentage: 8 },
+        { country: 'España', code: 'ES', percentage: 4 }
+      ]
+    },
+    valuationHistory: [
+      { year: '2023', valueInMillions: 0.3 },
+      { year: '2024', valueInMillions: 0.7 },
+      { year: '2025', valueInMillions: 1.0 },
+      { year: '2026', valueInMillions: 1.38 }
+    ],
+    recentBrands: ['Claro Nicaragua', 'Bananitox', 'Tigo', 'Gallo Más Gallo'],
+    bio: 'Creador de reels y sketches cómicos nicaragüense con 125K en Instagram y 340K en TikTok. Contenido ameno, viral y positivo ("Dios es Fiel").',
+    joinedYear: 2022
   }
 ];
 

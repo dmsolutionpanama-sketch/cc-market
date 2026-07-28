@@ -7,8 +7,9 @@ import {
   interleaveAndSortByDate 
 } from '../data/rssNewsData';
 import { 
-  Newspaper, Calendar, Clock, ArrowRight, Sparkles, Rss, ExternalLink, 
-  RefreshCw, Filter, Search, ChevronLeft, ChevronRight, Globe, Shuffle, CheckCircle2 
+  Newspaper, Calendar, Clock, Sparkles, Rss, ExternalLink, 
+  RefreshCw, Search, ChevronLeft, ChevronRight, Shuffle, X,
+  Building2, UserCheck, ShieldCheck, Share2, BookOpen
 } from 'lucide-react';
 import { translations } from '../data/translations';
 
@@ -26,6 +27,9 @@ export const NewsSection: React.FC<NewsSectionProps> = ({ lang, onSelectCreatorB
   );
   const [isLoadingRss, setIsLoadingRss] = useState<boolean>(false);
   const [isLiveActive, setIsLiveActive] = useState<boolean>(false);
+
+  // Modal Article Reader State
+  const [selectedArticle, setSelectedArticle] = useState<CreatorNewsItem | null>(null);
 
   // Filters & Pagination State
   const [selectedSource, setSelectedSource] = useState<string>('Todas');
@@ -106,10 +110,17 @@ export const NewsSection: React.FC<NewsSectionProps> = ({ lang, onSelectCreatorB
     setCurrentPage(1);
   };
 
-  // Open news article in new window/tab (_blank) or target page
-  const handleOpenArticle = (url?: string) => {
+  // Open external URL cleanly in new window/tab (_blank)
+  const handleOpenSourceWebsite = (url?: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
     if (!url) return;
     window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  // Open internal article reader modal
+  const handleReadArticleModal = (article: CreatorNewsItem, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setSelectedArticle(article);
   };
 
   return (
@@ -127,7 +138,7 @@ export const NewsSection: React.FC<NewsSectionProps> = ({ lang, onSelectCreatorB
               Noticias & Tendencias Globales del Creator Economy
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl font-normal">
-              Flujo dinámico e intercalado por fecha desde las principales fuentes internacionales: Tubefilter, TechCrunch, Dexerto, Forbes, YouTube Blog y CC-Market.
+              Flujo dinámico e intercalado por fecha desde nuestros medios y sitios amigos aliados: Tubefilter, TechCrunch, Dexerto, Forbes, YouTube Blog y CC-Market.
             </p>
           </div>
 
@@ -164,7 +175,7 @@ export const NewsSection: React.FC<NewsSectionProps> = ({ lang, onSelectCreatorB
         <div className="mb-6 bg-white p-4 rounded-2xl border border-slate-300 shadow-xs">
           <div className="flex items-center justify-between gap-2 mb-2">
             <span className="text-[11px] font-black text-slate-500 uppercase tracking-wider block">
-              Fuentes Oficiales RSS Monitoreadas:
+              Medios & Sitios Amigos Aliados:
             </span>
             {selectedSource !== 'Todas' && (
               <button
@@ -321,7 +332,7 @@ export const NewsSection: React.FC<NewsSectionProps> = ({ lang, onSelectCreatorB
             {paginatedNews.map((item) => (
               <article
                 key={item.id}
-                onClick={() => handleOpenArticle(item.externalUrl)}
+                onClick={() => handleReadArticleModal(item)}
                 className="bg-white rounded-2xl border-2 border-slate-300 hover:border-blue-500 shadow-xs hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group cursor-pointer"
               >
                 <div>
@@ -335,7 +346,7 @@ export const NewsSection: React.FC<NewsSectionProps> = ({ lang, onSelectCreatorB
 
                     {/* Source Logo Badge */}
                     <span className="absolute top-3 left-3 bg-slate-900/90 backdrop-blur-md text-white font-black text-[10px] px-2.5 py-1 rounded-lg shadow-sm border border-slate-700 uppercase tracking-wider">
-                      {item.sourceLogo || item.source || 'RSS Feed'}
+                      {item.sourceLogo || item.source || 'Sitio Amigo'}
                     </span>
 
                     {/* Live Badge */}
@@ -379,31 +390,28 @@ export const NewsSection: React.FC<NewsSectionProps> = ({ lang, onSelectCreatorB
                   </span>
 
                   <div className="flex items-center gap-1.5 shrink-0">
-                    {item.creatorName && onSelectCreatorByName && (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onSelectCreatorByName(item.creatorName!);
-                        }}
-                        className="font-extrabold text-blue-600 hover:text-blue-800 text-[10px] flex items-center gap-1 cursor-pointer bg-blue-50 px-2 py-1 rounded-md border border-blue-200 hover:bg-blue-100 transition-all"
-                        title="Ver ficha del creador"
-                      >
-                        <span>Profile</span>
-                      </button>
-                    )}
+                    
+                    {/* Button 'Fuente' linking to the original site */}
+                    <button
+                      type="button"
+                      onClick={(e) => handleOpenSourceWebsite(item.externalUrl, e)}
+                      className="font-extrabold text-slate-800 hover:text-blue-600 text-[10px] flex items-center gap-1 cursor-pointer bg-white px-2 py-1 rounded-md border border-slate-300 hover:border-blue-400 transition-all shadow-2xs"
+                      title={`Visitar portal oficial de ${item.source || 'Fuente'}`}
+                    >
+                      <span>Fuente</span>
+                      <ExternalLink className="w-2.5 h-2.5 text-blue-600" />
+                    </button>
 
-                    <a
-                      href={item.externalUrl || '#'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="font-extrabold text-slate-700 hover:text-blue-600 text-[11px] flex items-center gap-1 cursor-pointer bg-white px-2.5 py-1 rounded-md border border-slate-300 hover:border-blue-400 transition-all shadow-2xs"
-                      title="Leer noticia completa en una página nueva (_blank)"
+                    {/* Button 'Leer noticia' opening the full template modal inside the site */}
+                    <button
+                      type="button"
+                      onClick={(e) => handleReadArticleModal(item, e)}
+                      className="font-extrabold text-blue-700 hover:text-blue-900 text-[11px] flex items-center gap-1 cursor-pointer bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200 hover:bg-blue-100 transition-all"
+                      title="Leer noticia completa dentro de nuestra plantilla"
                     >
                       <span>Leer noticia</span>
-                      <ExternalLink className="w-3 h-3 text-blue-600" />
-                    </a>
+                      <BookOpen className="w-3 h-3 text-blue-600" />
+                    </button>
                   </div>
 
                 </div>
@@ -468,6 +476,166 @@ export const NewsSection: React.FC<NewsSectionProps> = ({ lang, onSelectCreatorB
         )}
 
       </div>
+
+      {/* Full Article Internal Template Modal */}
+      {selectedArticle && (
+        <div 
+          className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
+          onClick={() => setSelectedArticle(null)}
+        >
+          <div 
+            className="bg-white w-full max-w-4xl rounded-3xl border-2 border-slate-300 shadow-2xl overflow-hidden my-auto max-h-[90vh] flex flex-col relative animate-in fade-in zoom-in duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header Bar */}
+            <div className="bg-slate-900 text-white px-6 py-4 flex items-center justify-between border-b border-slate-800 shrink-0">
+              <div className="flex items-center gap-2">
+                <span className="bg-blue-600 text-white font-black text-xs px-2.5 py-1 rounded-md uppercase tracking-wider">
+                  {selectedArticle.sourceLogo || selectedArticle.source || 'Sitio Amigo'}
+                </span>
+                <span className="text-xs text-slate-300 font-bold hidden sm:inline">
+                  Redacción y Contenido por Equipo Aliado
+                </span>
+              </div>
+
+              <button
+                onClick={() => setSelectedArticle(null)}
+                className="p-1.5 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                title="Cerrar lectura"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Scrollable Article Body */}
+            <div className="p-6 sm:p-8 overflow-y-auto space-y-6">
+              
+              {/* Category & Date */}
+              <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 border-b border-slate-200 pb-4">
+                <span className="px-3 py-1 bg-blue-50 text-blue-700 font-black rounded-lg border border-blue-200 uppercase text-[10px]">
+                  {selectedArticle.category}
+                </span>
+                <div className="flex items-center gap-4 font-bold">
+                  <span className="flex items-center gap-1.5 text-slate-700">
+                    <Calendar className="w-4 h-4 text-blue-600" /> {selectedArticle.date}
+                  </span>
+                  <span className="flex items-center gap-1.5 text-slate-500">
+                    <Clock className="w-4 h-4 text-slate-400" /> {selectedArticle.readTime}
+                  </span>
+                </div>
+              </div>
+
+              {/* Title */}
+              <h1 className="text-xl sm:text-3xl font-black text-slate-900 leading-tight">
+                {selectedArticle.title}
+              </h1>
+
+              {/* Author / Source Badge */}
+              <div className="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-black shrink-0">
+                  <Building2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-xs font-black text-slate-900">
+                    {selectedArticle.author || selectedArticle.source}
+                  </div>
+                  <div className="text-[11px] text-slate-500">
+                    Equipo de Redacción de sitio amigo: <strong className="text-blue-600">{selectedArticle.source}</strong>
+                  </div>
+                </div>
+              </div>
+
+              {/* Cover Image */}
+              <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-xs max-h-96">
+                <img 
+                  src={selectedArticle.imageUrl} 
+                  alt={selectedArticle.title} 
+                  className="w-full h-full object-cover max-h-96"
+                />
+                <div className="absolute bottom-2 right-2 bg-slate-900/80 backdrop-blur-sm text-white text-[10px] font-bold px-2.5 py-1 rounded-md">
+                  Fotografía cortesía de {selectedArticle.source || 'Sitio Amigo'}
+                </div>
+              </div>
+
+              {/* Summary Lead */}
+              <div className="bg-blue-50/70 border-l-4 border-blue-600 p-4 rounded-r-xl text-slate-800 font-medium text-sm leading-relaxed">
+                <strong>Resumen Ejecutivo:</strong> {selectedArticle.summary}
+              </div>
+
+              {/* Full Article Content */}
+              <div className="prose max-w-none text-slate-800 text-sm leading-relaxed space-y-4 whitespace-pre-line font-normal">
+                {selectedArticle.fullContent || selectedArticle.summary}
+              </div>
+
+              {/* Creator Tag if linked */}
+              {selectedArticle.creatorName && onSelectCreatorByName && (
+                <div className="bg-slate-100 p-4 rounded-2xl border border-slate-300 flex items-center justify-between gap-3">
+                  <div>
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-wider block">
+                      Creador Mencionado
+                    </span>
+                    <span className="text-sm font-black text-slate-900">
+                      {selectedArticle.creatorName}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      const name = selectedArticle.creatorName!;
+                      setSelectedArticle(null);
+                      onSelectCreatorByName(name);
+                    }}
+                    className="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-extrabold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
+                  >
+                    <span>Ver Ficha del Creador</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              {/* Source Credit Box */}
+              <div className="bg-slate-50 border border-slate-300 p-4 rounded-2xl text-xs text-slate-600 space-y-2">
+                <div className="flex items-center gap-2 font-black text-slate-900">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  <span>Atribución Editorial y Derechos de Autor</span>
+                </div>
+                <p className="text-[11px] leading-normal text-slate-500">
+                  Esta noticia ha sido adaptada y mostrada dentro de nuestra plantilla con fines informativos para la comunidad de creadores de CC-Market. El contenido original y la investigación periodística corresponden al equipo de redacción de nuestro sitio amigo y aliado <strong>{selectedArticle.source}</strong>.
+                </p>
+              </div>
+
+            </div>
+
+            {/* Modal Footer Actions */}
+            <div className="bg-slate-100 px-6 py-4 border-t border-slate-300 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+              <span className="text-xs text-slate-600 font-bold">
+                Medio Aliado: <strong className="text-slate-900">{selectedArticle.source || 'Sitio Amigo'}</strong>
+              </span>
+
+              <div className="flex items-center gap-3 w-full sm:w-auto">
+                {/* Button 'Fuente' to open the original partner homepage */}
+                <button
+                  type="button"
+                  onClick={(e) => handleOpenSourceWebsite(selectedArticle.externalUrl, e)}
+                  className="flex-1 sm:flex-initial px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
+                >
+                  <span>Fuente</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-blue-400" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedArticle(null)}
+                  className="flex-1 sm:flex-initial px-4 py-2.5 bg-white hover:bg-slate-200 text-slate-800 border border-slate-300 rounded-xl text-xs font-extrabold transition-all cursor-pointer"
+                >
+                  Cerrar Lectura
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </section>
   );
 };

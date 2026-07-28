@@ -119,11 +119,14 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
           {/* Reveal / Explore Catalog Action */}
           <div className="mt-6 pt-4 border-t border-slate-300 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50 p-4 rounded-xl border border-slate-300">
             <div className="text-left text-xs text-slate-700">
-              <span className="font-bold text-blue-700 block mb-0.5">
-                {isListRevealed || filters.searchQuery.trim() !== '' ? '🔓 Listado Activo' : '🔒 Listado Oculto'}
+              <span className="font-bold text-blue-700 flex items-center gap-1.5 mb-0.5">
+                <UserCheck className="w-4 h-4 text-emerald-600" />
+                <span>{isListRevealed || filters.searchQuery.trim() !== '' ? 'Catálogo de Creadores Auditados Visible' : 'Listado de Creadores Oculto'}</span>
               </span>
               <p className="text-slate-500">
-                {t.hiddenListTip}
+                {isListRevealed 
+                  ? `Mostrando ${totalResults} creadores con datos auditados de audiencias y tarifas en vivo.` 
+                  : t.hiddenListTip}
               </p>
             </div>
 
@@ -136,7 +139,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
               }`}
             >
               <Eye className="w-4 h-4" />
-              <span>{isListRevealed ? 'Ocultar Listado Completo' : t.exploreAll}</span>
+              <span>{isListRevealed ? 'Ocultar Catálogo' : 'Mostrar Catálogo Completo'}</span>
             </button>
           </div>
 

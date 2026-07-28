@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Header, SectionType } from './components/Header';
 import { HeroSearch } from './components/HeroSearch';
 import { AdvancedFilters } from './components/AdvancedFilters';
@@ -7,12 +7,16 @@ import { TrendingCreatorsSection } from './components/TrendingCreatorsSection';
 import { TopRankingSection } from './components/TopRankingSection';
 import { NewsSection } from './components/NewsSection';
 import { CreatorCard } from './components/CreatorCard';
+import { InfiniteCreatorsCarousel } from './components/InfiniteCreatorsCarousel';
 import { CreatorDetailModal } from './components/CreatorDetailModal';
 import { ServiceRequestModal } from './components/ServiceRequestModal';
 import { ComparisonDrawer } from './components/ComparisonDrawer';
 import { ShortlistModal } from './components/ShortlistModal';
+import { AuthModal } from './components/AuthModal';
+import { CreatorPortalModal } from './components/CreatorPortalModal';
+import { AdminPanelModal } from './components/AdminPanelModal';
 import { creatorsMockData } from './data/creators';
-import { Creator, FilterState, LanguageCode } from './types';
+import { Creator, FilterState, LanguageCode, CreatorUserAccount, AuthUserSession, PaymentDetails, CreatorApprovalStatus } from './types';
 import { Search, Sparkles, FilterX, ShieldCheck, Lock, Eye, TrendingUp, Newspaper, Award, Building2 } from 'lucide-react';
 import { translations } from './data/translations';
 import { sanitizeInput } from './utils/security';
@@ -35,9 +39,96 @@ export default function App() {
   const [lang, setLang] = useState<LanguageCode>('es');
   const t = translations[lang] || translations.es;
 
+  // Persistence: Creators List
+  const [creatorsList, setCreatorsList] = useState<Creator[]>(() => {
+    try {
+      const saved = localStorage.getItem('cc_market_creators_v2');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error(e);
+    }
+    return creatorsMockData;
+  });
+
+  // Persistence: User Accounts
+  const [userAccounts, setUserAccounts] = useState<CreatorUserAccount[]>(() => {
+    try {
+      const saved = localStorage.getItem('cc_market_accounts_v2');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error(e);
+    }
+    return [
+      {
+        id: 'acc-yenvideo-demo',
+        email: 'yenvideo@ccmarket.com',
+        creatorId: 'creator-yenvideo',
+        status: 'approved',
+        disclaimerAccepted: true,
+        paymentDetails: {
+          paymentType: 'bank_transfer',
+          bankName: 'Banco General Panamá',
+          accountNumber: '04-01-98-112233',
+          accountHolderName: 'Yenvideo Panamá S.A.',
+          taxIdOrRuc: '1558-12-8822',
+          country: 'Panamá'
+        },
+        registeredAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      },
+      {
+        id: 'acc-jr-demo',
+        email: 'jrcomediante@ccmarket.com',
+        creatorId: 'creator-jr-comediante',
+        status: 'approved',
+        disclaimerAccepted: true,
+        paymentDetails: {
+          paymentType: 'bank_transfer',
+          bankName: 'BANPRO Nicaragua',
+          accountNumber: '100-200-300-400',
+          accountHolderName: 'JR Comediante',
+          taxIdOrRuc: '001-120590-0001A',
+          country: 'Nicaragua'
+        },
+        registeredAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }
+    ];
+  });
+
+  // Auth Session State
+  const [authSession, setAuthSession] = useState<AuthUserSession>(() => {
+    try {
+      const saved = localStorage.getItem('cc_market_session_v2');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error(e);
+    }
+    return { isLoggedIn: false, role: 'creator' };
+  });
+
+  // Save to LocalStorage on changes
+  useEffect(() => {
+    try {
+      localStorage.setItem('cc_market_creators_v2', JSON.stringify(creatorsList));
+    } catch (e) {}
+  }, [creatorsList]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('cc_market_accounts_v2', JSON.stringify(userAccounts));
+    } catch (e) {}
+  }, [userAccounts]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('cc_market_session_v2', JSON.stringify(authSession));
+    } catch (e) {}
+  }, [authSession]);
+
   const [filters, setFilters] = useState<FilterState>(initialFilterState);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-  const [isListRevealed, setIsListRevealed] = useState(false);
+  const [isListRevealed, setIsListRevealed] = useState(true);
   
   // Active Section for In-Page Navigation (_self)
   const [activeSection, setActiveSection] = useState<SectionType>('catalog');
@@ -49,6 +140,86 @@ export default function App() {
   const [isShortlistOpen, setIsShortlistOpen] = useState(false);
   const [isComparisonOpen, setIsComparisonOpen] = useState(false);
   const [isServiceRequestOpen, setIsServiceRequestOpen] = useState(false);
+
+  // Auth & Portal Modal States
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isPortalModalOpen, setIsPortalModalOpen] = useState(false);
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+
+  // Auth & Account Handlers
+  const handleLoginSuccess = (role: 'creator' | 'admin', email: string, creatorId?: string) => {
+    if (role === 'admin') {
+      const session: AuthUserSession = {
+        isLoggedIn: true,
+        role: 'admin'
+      };
+      setAuthSession(session);
+      setIsAdminModalOpen(true);
+      return;
+    }
+
+    // Role Creator
+    const userAcc = userAccounts.find(a => a.email.toLowerCase() === email.toLowerCase()) || userAccounts[0];
+    const cId = creatorId || userAcc?.creatorId || 'creator-yenvideo';
+    const creatorProf = creatorsList.find(c => c.id === cId) || creatorsList[0];
+
+    const session: AuthUserSession = {
+      isLoggedIn: true,
+      role: 'creator',
+      userAccount: userAcc,
+      creatorProfile: creatorProf
+    };
+    setAuthSession(session);
+    setIsPortalModalOpen(true);
+  };
+
+  const handleRegisterCreator = (newAccount: CreatorUserAccount, newCreator: Creator) => {
+    setUserAccounts(prev => [newAccount, ...prev]);
+    setCreatorsList(prev => [newCreator, ...prev]);
+
+    const session: AuthUserSession = {
+      isLoggedIn: true,
+      role: 'creator',
+      userAccount: newAccount,
+      creatorProfile: newCreator
+    };
+    setAuthSession(session);
+  };
+
+  const handleUpdateCreatorProfile = (updatedProfile: Creator, updatedPayment?: PaymentDetails) => {
+    setCreatorsList(prev => prev.map(c => c.id === updatedProfile.id ? updatedProfile : c));
+    
+    if (updatedPayment && authSession.userAccount) {
+      setUserAccounts(prev => prev.map(acc => {
+        if (acc.creatorId === updatedProfile.id) {
+          return { ...acc, paymentDetails: updatedPayment, updatedAt: new Date().toISOString() };
+        }
+        return acc;
+      }));
+    }
+
+    // Update active session profile
+    setAuthSession(prev => ({
+      ...prev,
+      creatorProfile: updatedProfile,
+      userAccount: prev.userAccount && updatedPayment ? { ...prev.userAccount, paymentDetails: updatedPayment } : prev.userAccount
+    }));
+  };
+
+  const handleToggleCreatorStatus = (accountId: string, newStatus: CreatorApprovalStatus) => {
+    setUserAccounts(prev => prev.map(acc => {
+      if (acc.id === accountId) {
+        return { ...acc, status: newStatus, updatedAt: new Date().toISOString() };
+      }
+      return acc;
+    }));
+  };
+
+  const handleLogout = () => {
+    setAuthSession({ isLoggedIn: false, role: 'creator' });
+    setIsPortalModalOpen(false);
+    setIsAdminModalOpen(false);
+  };
 
   // Calculate active filter count
   const activeFilterCount = useMemo(() => {
@@ -75,12 +246,25 @@ export default function App() {
 
   const handleResetFilters = () => {
     setFilters(initialFilterState);
-    setIsListRevealed(false);
+    setIsListRevealed(true);
   };
 
   // Filter and Sort creators logic
   const filteredCreators = useMemo(() => {
-    return creatorsMockData.filter((creator) => {
+    return creatorsList.filter((creator) => {
+      // Check account status if this creator belongs to a registered account
+      const creatorAcc = userAccounts.find(a => a.creatorId === creator.id);
+      if (creatorAcc) {
+        // If pending or rejected, hide from public unless logged in as admin OR as that creator
+        if (creatorAcc.status !== 'approved') {
+          const isAdmin = authSession.isLoggedIn && authSession.role === 'admin';
+          const isSelf = authSession.isLoggedIn && authSession.userAccount?.creatorId === creator.id;
+          if (!isAdmin && !isSelf) {
+            return false;
+          }
+        }
+      }
+
       // Search query
       if (filters.searchQuery.trim() !== '') {
         const query = filters.searchQuery.toLowerCase();
@@ -276,20 +460,15 @@ export default function App() {
           </div>
         </div>
       ) : filteredCreators.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCreators.map((creator) => (
-            <CreatorCard
-              key={creator.id}
-              creator={creator}
-              onViewDetails={(c) => setSelectedCreator(c)}
-              onToggleShortlist={handleToggleShortlist}
-              isShortlisted={shortlist.some((s) => s.id === creator.id)}
-              onToggleCompare={handleToggleCompare}
-              isCompared={comparisonList.some((c) => c.id === creator.id)}
-              lang={lang}
-            />
-          ))}
-        </div>
+        <InfiniteCreatorsCarousel
+          creators={filteredCreators}
+          onViewDetails={(c) => setSelectedCreator(c)}
+          onToggleShortlist={handleToggleShortlist}
+          shortlist={shortlist}
+          onToggleCompare={handleToggleCompare}
+          comparisonList={comparisonList}
+          lang={lang}
+        />
       ) : (
         <div className="bg-white rounded-2xl border border-slate-300 p-12 text-center max-w-lg mx-auto my-8 shadow-xs">
           <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400 border border-slate-200">
@@ -327,7 +506,12 @@ export default function App() {
         }}
         lang={lang}
         onLangChange={setLang}
-        totalCreatorsCount={creatorsMockData.length}
+        totalCreatorsCount={creatorsList.length}
+        authSession={authSession}
+        onOpenAuthModal={() => setIsAuthModalOpen(true)}
+        onOpenPortalModal={() => setIsPortalModalOpen(true)}
+        onOpenAdminPanel={() => setIsAdminModalOpen(true)}
+        onLogout={handleLogout}
       />
 
       {/* Main Container - Renders Active Section Inline (_self Page View) */}
@@ -369,7 +553,7 @@ export default function App() {
 
           {activeSection === 'trending' && (
             <TrendingCreatorsSection
-              creators={creatorsMockData}
+              creators={creatorsList}
               onSelectCreator={(c) => setSelectedCreator(c)}
               lang={lang}
             />
@@ -384,7 +568,7 @@ export default function App() {
 
           {activeSection === 'ranking' && (
             <TopRankingSection
-              creators={creatorsMockData}
+              creators={creatorsList}
               onSelectCreator={(c) => setSelectedCreator(c)}
               lang={lang}
             />
@@ -393,7 +577,7 @@ export default function App() {
           {activeSection === 'partners' && (
             <div className="py-8 bg-slate-50">
               <PartnersBanner
-                creators={creatorsMockData}
+                creators={creatorsList}
                 onSelectCreator={(c) => setSelectedCreator(c)}
                 lang={lang}
               />
@@ -412,6 +596,37 @@ export default function App() {
         isCompared={selectedCreator ? comparisonList.some((c) => c.id === selectedCreator.id) : false}
         lang={lang}
         onOpenServiceRequest={() => setIsServiceRequestOpen(true)}
+      />
+
+      {/* Auth / Login / Register Modal */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onLoginSuccess={handleLoginSuccess}
+        onRegisterCreator={handleRegisterCreator}
+        existingAccounts={userAccounts}
+      />
+
+      {/* Creator Self-Management Portal Modal */}
+      {authSession.isLoggedIn && authSession.role === 'creator' && authSession.creatorProfile && authSession.userAccount && (
+        <CreatorPortalModal
+          isOpen={isPortalModalOpen}
+          onClose={() => setIsPortalModalOpen(false)}
+          userAccount={authSession.userAccount}
+          creatorProfile={authSession.creatorProfile}
+          onUpdateCreatorProfile={handleUpdateCreatorProfile}
+          onOpenDetailModal={(creator) => setSelectedCreator(creator)}
+        />
+      )}
+
+      {/* Admin Panel Modal (Dar de alta / Dar de baja) */}
+      <AdminPanelModal
+        isOpen={isAdminModalOpen}
+        onClose={() => setIsAdminModalOpen(false)}
+        accounts={userAccounts}
+        creators={creatorsList}
+        onToggleCreatorStatus={handleToggleCreatorStatus}
+        onOpenCreatorDetail={(creator) => setSelectedCreator(creator)}
       />
 
       {/* Service Request & Call Center Modal */}

@@ -1,6 +1,6 @@
 import React from 'react';
-import { TrendingUp, Layers, Bookmark, PhoneCall, Globe, CheckCircle2, Search, Newspaper, Award, Building2, ShieldCheck } from 'lucide-react';
-import { Creator, LanguageCode } from '../types';
+import { TrendingUp, Layers, Bookmark, PhoneCall, Globe, CheckCircle2, Search, Newspaper, Award, Building2, ShieldCheck, User, LogIn, LogOut, KeyRound } from 'lucide-react';
+import { Creator, LanguageCode, AuthUserSession } from '../types';
 import { translations } from '../data/translations';
 
 export type SectionType = 'catalog' | 'trending' | 'ranking' | 'news' | 'partners';
@@ -16,6 +16,11 @@ interface HeaderProps {
   lang: LanguageCode;
   onLangChange: (lang: LanguageCode) => void;
   totalCreatorsCount: number;
+  authSession: AuthUserSession;
+  onOpenAuthModal: () => void;
+  onOpenPortalModal: () => void;
+  onOpenAdminPanel: () => void;
+  onLogout: () => void;
 }
 
 const langOptions: { code: LanguageCode; flag: string; label: string }[] = [
@@ -37,6 +42,11 @@ export const Header: React.FC<HeaderProps> = ({
   lang,
   onLangChange,
   totalCreatorsCount,
+  authSession,
+  onOpenAuthModal,
+  onOpenPortalModal,
+  onOpenAdminPanel,
+  onLogout,
 }) => {
   const t = translations[lang] || translations.es;
 
@@ -148,9 +158,67 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           </nav>
 
-          {/* Right Controls: Language Selector, Service Request & Shortlist */}
-          <div className="flex items-center gap-3">
+          {/* Right Controls: Auth/Login, Language Selector, Service Request & Shortlist */}
+          <div className="flex items-center gap-2.5">
             
+            {/* Login / User Portal / Admin Panel Button */}
+            {!authSession.isLoggedIn ? (
+              <button
+                onClick={onOpenAuthModal}
+                className="px-3.5 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 font-extrabold text-xs flex items-center gap-2 border border-blue-200 transition-all cursor-pointer shadow-2xs"
+                title="Iniciar sesión o crear cuenta de Creador"
+              >
+                <LogIn className="w-4 h-4 text-blue-600" />
+                <span className="hidden sm:inline">Iniciar Sesión</span>
+                <span className="bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded uppercase font-black">
+                  Creadores / Admin
+                </span>
+              </button>
+            ) : authSession.role === 'admin' ? (
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={onOpenAdminPanel}
+                  className="px-3 py-2 rounded-xl bg-purple-900 hover:bg-purple-800 text-amber-300 font-black text-xs flex items-center gap-1.5 border border-purple-700 cursor-pointer shadow-xs"
+                >
+                  <KeyRound className="w-4 h-4 text-amber-400" />
+                  <span>Panel Admin</span>
+                </button>
+                <button
+                  onClick={onLogout}
+                  className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 cursor-pointer"
+                  title="Cerrar Sesión"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={onOpenPortalModal}
+                  className="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-950 font-black text-xs flex items-center gap-2 border border-emerald-300 cursor-pointer shadow-2xs"
+                >
+                  <img
+                    src={authSession.creatorProfile?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'}
+                    alt="Perfil"
+                    className="w-6 h-6 rounded-lg object-cover border border-emerald-500"
+                  />
+                  <span className="hidden sm:inline truncate max-w-[100px]">
+                    {authSession.creatorProfile?.name || 'Mi Perfil'}
+                  </span>
+                  <span className="text-[10px] bg-emerald-600 text-white px-1.5 py-0.5 rounded uppercase">
+                    Portal
+                  </span>
+                </button>
+                <button
+                  onClick={onLogout}
+                  className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 cursor-pointer"
+                  title="Cerrar Sesión"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
             {/* Language Selector */}
             <div className="relative flex items-center bg-slate-100 border border-slate-300 rounded-xl px-2 py-1.5">
               <Globe className="w-4 h-4 text-slate-500 mr-1.5" />

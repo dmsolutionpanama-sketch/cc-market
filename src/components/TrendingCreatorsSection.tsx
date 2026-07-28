@@ -46,6 +46,48 @@ const creatorPostPreviews: Record<string, { imageUrl: string; postTitle: string;
     postTitle: '📱 Review Auditada de Nuevos Dispositivos Inteligentes',
     publishDate: 'Hace 6 días',
     reachBadge: '850K Vistas'
+  },
+  'creator-yenvideo': {
+    imageUrl: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=800',
+    postTitle: '🔥 Gran Estreno del Show Reality "Parking de Yenvideo"',
+    publishDate: 'Hace 1 día',
+    reachBadge: '2.8M Vistas en Instagram'
+  },
+  'creator-jr-comediante': {
+    imageUrl: 'https://images.unsplash.com/photo-1517649763962-0c6232662000?auto=format&fit=crop&q=80&w=800',
+    postTitle: '⚽️ Sketch de Comedia con Real Estelí FC & Parodias de Fútbol',
+    publishDate: 'Hace 2 días',
+    reachBadge: '12.5M Vistas en TikTok'
+  },
+  'creator-marko': {
+    imageUrl: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&q=80&w=800',
+    postTitle: '🎭 Sketch Viral "Cosas de Latinoamericanos" & Tour de Stand-up',
+    publishDate: 'Ayer',
+    reachBadge: '18.2M Vistas'
+  },
+  'creator-duckins': {
+    imageUrl: 'https://images.unsplash.com/photo-1508344928928-7165b67de128?auto=format&fit=crop&q=80&w=800',
+    postTitle: '⚾️ Rutina de Entrenamiento de Béisbol & Lifestyle Atleta',
+    publishDate: 'Hace 3 días',
+    reachBadge: '1.4M Vistas'
+  },
+  'creator-joshua-blake': {
+    imageUrl: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800',
+    postTitle: '✨ Cobertura Exclusiva de Eventos & Streetwear de Tendencia',
+    publishDate: 'Hace 2 días',
+    reachBadge: '980K Vistas'
+  },
+  'creator-yosoyelpampa': {
+    imageUrl: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&q=80&w=800',
+    postTitle: '😂 Humor Panameño Auténtico: "No Entienden la Puta Vibra"',
+    publishDate: 'Hace 4 días',
+    reachBadge: '620K Vistas'
+  },
+  'creator-boanerges': {
+    imageUrl: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=800',
+    postTitle: '🇳🇮 Sketch Cómico "Cosas que solo pasan en Nicaragua"',
+    publishDate: 'Hace 3 días',
+    reachBadge: '550K Vistas'
   }
 };
 
