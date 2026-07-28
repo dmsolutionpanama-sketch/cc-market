@@ -135,6 +135,10 @@ export interface CreatorNewsItem {
   creatorName?: string;
   imageUrl: string;
   readTime: string;
+  source?: string;
+  sourceLogo?: string;
+  externalUrl?: string;
+  isRssLive?: boolean;
 }
 
 export interface FilterState {
