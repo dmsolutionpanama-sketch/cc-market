@@ -153,7 +153,9 @@ export interface CreatorUserAccount {
 
 export interface AuthUserSession {
   isLoggedIn: boolean;
-  role: 'creator' | 'admin';
+  role: 'creator' | 'admin' | 'brand';
+  isBrandValidated?: boolean;
+  brandName?: string;
   userAccount?: CreatorUserAccount;
   creatorProfile?: Creator;
 }

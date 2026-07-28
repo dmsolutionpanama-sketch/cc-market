@@ -2,6 +2,7 @@ import React from 'react';
 import { Search, SlidersHorizontal, X, Sparkles, Filter, RefreshCw, Eye, UserCheck, Flame } from 'lucide-react';
 import { FilterState, Platform, LanguageCode } from '../types';
 import { translations } from '../data/translations';
+import { SocialPlatformIcon } from './SocialPlatformIcon';
 
 interface HeroSearchProps {
   filters: FilterState;
@@ -95,7 +96,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
             </button>
           </div>
 
-          {/* Social Network Quick Filters */}
+          {/* Social Network Quick Filters with Logos and Text */}
           <div className="mt-5 flex items-center justify-center gap-2 flex-wrap">
             <span className="text-xs font-bold text-slate-500 mr-1">{t.filterPlatform}:</span>
             {platformsList.map((p) => {
@@ -104,13 +105,14 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                 <button
                   key={p}
                   onClick={() => onFilterChange({ platform: p })}
-                  className={`px-3 py-1 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-extrabold flex items-center gap-1.5 transition-all cursor-pointer ${
                     isActive
-                      ? 'bg-blue-600 text-white shadow-md border border-slate-300'
-                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300'
+                      ? 'bg-blue-600 text-white shadow-md border border-blue-700'
+                      : 'bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-300'
                   }`}
                 >
-                  {p === 'All' ? 'Todas' : p}
+                  {p !== 'All' && <SocialPlatformIcon platform={p} size="xs" />}
+                  <span>{p === 'All' ? 'Todas' : p}</span>
                 </button>
               );
             })}

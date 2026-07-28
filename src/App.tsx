@@ -15,6 +15,7 @@ import { ShortlistModal } from './components/ShortlistModal';
 import { AuthModal } from './components/AuthModal';
 import { CreatorPortalModal } from './components/CreatorPortalModal';
 import { AdminPanelModal } from './components/AdminPanelModal';
+import { Footer } from './components/Footer';
 import { creatorsMockData } from './data/creators';
 import { Creator, FilterState, LanguageCode, CreatorUserAccount, AuthUserSession, PaymentDetails, CreatorApprovalStatus } from './types';
 import { Search, Sparkles, FilterX, ShieldCheck, Lock, Eye, TrendingUp, Newspaper, Award, Building2 } from 'lucide-react';
@@ -37,6 +38,7 @@ const initialFilterState: FilterState = {
 
 export default function App() {
   const [lang, setLang] = useState<LanguageCode>('es');
+  const [textSize, setTextSize] = useState<'normal' | 'large' | 'xlarge'>('large');
   const t = translations[lang] || translations.es;
 
   // Persistence: Creators List
@@ -489,8 +491,10 @@ export default function App() {
     </div>
   );
 
+  const textSizeClass = textSize === 'large' ? 'text-[17px]' : textSize === 'xlarge' ? 'text-[19px]' : 'text-[15px]';
+
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 flex flex-col selection:bg-blue-600 selection:text-white">
+    <div className={`min-h-screen bg-slate-50 font-sans text-slate-900 flex flex-col overflow-x-hidden selection:bg-blue-600 selection:text-white transition-all ${textSizeClass}`}>
       
       {/* Header with Navigation Menu (_self Navigation) */}
       <Header
@@ -512,6 +516,8 @@ export default function App() {
         onOpenPortalModal={() => setIsPortalModalOpen(true)}
         onOpenAdminPanel={() => setIsAdminModalOpen(true)}
         onLogout={handleLogout}
+        textSize={textSize}
+        onTextSizeChange={setTextSize}
       />
 
       {/* Main Container - Renders Active Section Inline (_self Page View) */}
@@ -655,35 +661,18 @@ export default function App() {
         onClearShortlist={() => setShortlist([])}
       />
 
-      {/* Security Protection Footer */}
-      <footer className="bg-white text-slate-600 border-t border-slate-300 py-10 px-4 sm:px-6 lg:px-8 text-xs">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white font-black flex items-center justify-center text-xl shadow-md border border-blue-500">
-              CC
-            </div>
-            <div>
-              <span className="font-extrabold text-slate-900 text-base">CC-Market 2026</span>
-              <p className="text-[11px] text-slate-500 mt-0.5">
-                Plataforma de valoración, métricas y contratación de creadores de contenido.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 text-emerald-800 bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-200 text-xs font-bold">
-            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>Seguridad Verificada: Protección contra XSS, sanitización de datos & encriptación SSL.</span>
-          </div>
-
-          <div className="flex items-center gap-4 text-slate-700 font-bold flex-wrap justify-center">
-            <button onClick={() => { setActiveSection('catalog'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-blue-600 transition-colors cursor-pointer">Catálogo</button>
-            <button onClick={() => { setActiveSection('trending'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-blue-600 transition-colors cursor-pointer">Virales & Redes</button>
-            <button onClick={() => { setActiveSection('news'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-blue-600 transition-colors cursor-pointer">Noticias</button>
-            <button onClick={() => { setActiveSection('ranking'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-blue-600 transition-colors cursor-pointer">Líderes</button>
-            <button onClick={() => { setActiveSection('partners'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-blue-600 transition-colors cursor-pointer">Patrocinadores</button>
-          </div>
-        </div>
-      </footer>
+      {/* Complete Footer with Horizontal Menu and Copyright D&M Solution Ecosystem */}
+      <Footer
+        activeSection={activeSection}
+        onSelectSection={(section) => setActiveSection(section)}
+        onOpenShortlist={() => setIsShortlistOpen(true)}
+        shortlistCount={shortlist.length}
+        onOpenComparison={() => setIsComparisonOpen(true)}
+        comparisonCount={comparisonList.length}
+        onOpenServiceRequest={() => setIsServiceRequestOpen(true)}
+        onOpenAuthModal={() => setIsAuthModalOpen(true)}
+        lang={lang}
+      />
 
     </div>
   );

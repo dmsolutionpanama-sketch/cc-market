@@ -5,6 +5,7 @@ import {
   Sparkles, DollarSign, ExternalLink, Globe, FileText
 } from 'lucide-react';
 import { Creator, CreatorUserAccount, PaymentDetails } from '../types';
+import { SocialPlatformIcon } from './SocialPlatformIcon';
 
 interface CreatorPortalModalProps {
   isOpen: boolean;
@@ -401,8 +402,9 @@ export const CreatorPortalModal: React.FC<CreatorPortalModalProps> = ({
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-[11px] font-bold text-slate-600 mb-1">
-                        Instagram Followers
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1 flex items-center gap-1.5">
+                        <SocialPlatformIcon platform="Instagram" size="xs" />
+                        <span>Instagram Followers</span>
                       </label>
                       <input
                         type="text"
@@ -414,8 +416,9 @@ export const CreatorPortalModal: React.FC<CreatorPortalModalProps> = ({
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-bold text-slate-600 mb-1">
-                        TikTok Followers
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1 flex items-center gap-1.5">
+                        <SocialPlatformIcon platform="TikTok" size="xs" />
+                        <span>TikTok Followers</span>
                       </label>
                       <input
                         type="text"
@@ -427,8 +430,9 @@ export const CreatorPortalModal: React.FC<CreatorPortalModalProps> = ({
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-bold text-slate-600 mb-1">
-                        YouTube Followers
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1 flex items-center gap-1.5">
+                        <SocialPlatformIcon platform="YouTube" size="xs" />
+                        <span>YouTube Followers</span>
                       </label>
                       <input
                         type="text"

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrendingUp, Layers, Bookmark, PhoneCall, Globe, CheckCircle2, Search, Newspaper, Award, Building2, ShieldCheck, User, LogIn, LogOut, KeyRound } from 'lucide-react';
+import { TrendingUp, Layers, Bookmark, Globe, CheckCircle2, Search, Newspaper, Award, Building2, ShieldCheck, User, LogIn, LogOut, KeyRound, Type } from 'lucide-react';
 import { Creator, LanguageCode, AuthUserSession } from '../types';
 import { translations } from '../data/translations';
 
@@ -21,6 +21,8 @@ interface HeaderProps {
   onOpenPortalModal: () => void;
   onOpenAdminPanel: () => void;
   onLogout: () => void;
+  textSize: 'normal' | 'large' | 'xlarge';
+  onTextSizeChange: (size: 'normal' | 'large' | 'xlarge') => void;
 }
 
 const langOptions: { code: LanguageCode; flag: string; label: string }[] = [
@@ -36,7 +38,6 @@ export const Header: React.FC<HeaderProps> = ({
   comparisonList,
   onOpenShortlist,
   onOpenComparison,
-  onOpenServiceRequest,
   activeSection,
   onSelectSection,
   lang,
@@ -47,6 +48,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenPortalModal,
   onOpenAdminPanel,
   onLogout,
+  textSize,
+  onTextSizeChange,
 }) => {
   const t = translations[lang] || translations.es;
 
@@ -158,74 +161,50 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           </nav>
 
-          {/* Right Controls: Auth/Login, Language Selector, Service Request & Shortlist */}
-          <div className="flex items-center gap-2.5">
+          {/* Right Controls: Font Size, Language, Shortlist (Conditional) & Icon-only Auth at End */}
+          <div className="flex items-center gap-2 sm:gap-2.5">
             
-            {/* Login / User Portal / Admin Panel Button */}
-            {!authSession.isLoggedIn ? (
+            {/* Font Size Adjuster Control Widget */}
+            <div className="flex items-center bg-slate-100 border border-slate-300 rounded-xl p-0.5 text-xs font-bold" title="Ajustar tamaño de texto de la plataforma">
+              <span className="px-1.5 text-slate-500 font-mono hidden sm:inline flex items-center gap-0.5">
+                <Type className="w-3.5 h-3.5 text-slate-600" />
+              </span>
               <button
-                onClick={onOpenAuthModal}
-                className="px-3.5 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 font-extrabold text-xs flex items-center gap-2 border border-blue-200 transition-all cursor-pointer shadow-2xs"
-                title="Iniciar sesión o crear cuenta de Creador"
+                onClick={() => onTextSizeChange('normal')}
+                className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
+                  textSize === 'normal' ? 'bg-blue-600 text-white font-black' : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Tamaño Normal (100%)"
               >
-                <LogIn className="w-4 h-4 text-blue-600" />
-                <span className="hidden sm:inline">Iniciar Sesión</span>
-                <span className="bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded uppercase font-black">
-                  Creadores / Admin
-                </span>
+                A-
               </button>
-            ) : authSession.role === 'admin' ? (
-              <div className="flex items-center gap-1.5">
-                <button
-                  onClick={onOpenAdminPanel}
-                  className="px-3 py-2 rounded-xl bg-purple-900 hover:bg-purple-800 text-amber-300 font-black text-xs flex items-center gap-1.5 border border-purple-700 cursor-pointer shadow-xs"
-                >
-                  <KeyRound className="w-4 h-4 text-amber-400" />
-                  <span>Panel Admin</span>
-                </button>
-                <button
-                  onClick={onLogout}
-                  className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 cursor-pointer"
-                  title="Cerrar Sesión"
-                >
-                  <LogOut className="w-4 h-4" />
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-1.5">
-                <button
-                  onClick={onOpenPortalModal}
-                  className="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-950 font-black text-xs flex items-center gap-2 border border-emerald-300 cursor-pointer shadow-2xs"
-                >
-                  <img
-                    src={authSession.creatorProfile?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'}
-                    alt="Perfil"
-                    className="w-6 h-6 rounded-lg object-cover border border-emerald-500"
-                  />
-                  <span className="hidden sm:inline truncate max-w-[100px]">
-                    {authSession.creatorProfile?.name || 'Mi Perfil'}
-                  </span>
-                  <span className="text-[10px] bg-emerald-600 text-white px-1.5 py-0.5 rounded uppercase">
-                    Portal
-                  </span>
-                </button>
-                <button
-                  onClick={onLogout}
-                  className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 cursor-pointer"
-                  title="Cerrar Sesión"
-                >
-                  <LogOut className="w-4 h-4" />
-                </button>
-              </div>
-            )}
+              <button
+                onClick={() => onTextSizeChange('large')}
+                className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
+                  textSize === 'large' ? 'bg-blue-600 text-white font-black' : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Tamaño Grande (+2pt Default)"
+              >
+                A
+              </button>
+              <button
+                onClick={() => onTextSizeChange('xlarge')}
+                className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
+                  textSize === 'xlarge' ? 'bg-blue-600 text-white font-black' : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Tamaño Extra Grande (+4pt)"
+              >
+                A+
+              </button>
+            </div>
 
             {/* Language Selector */}
             <div className="relative flex items-center bg-slate-100 border border-slate-300 rounded-xl px-2 py-1.5">
-              <Globe className="w-4 h-4 text-slate-500 mr-1.5" />
+              <Globe className="w-4 h-4 text-slate-500 mr-1" />
               <select
                 value={lang}
                 onChange={(e) => onLangChange(e.target.value as LanguageCode)}
-                className="bg-transparent text-slate-900 font-bold text-xs focus:outline-none cursor-pointer pr-1"
+                className="bg-transparent text-slate-900 font-bold text-xs focus:outline-none cursor-pointer pr-0.5"
               >
                 {langOptions.map((lo) => (
                   <option key={lo.code} value={lo.code} className="bg-white text-slate-900">
@@ -235,27 +214,69 @@ export const Header: React.FC<HeaderProps> = ({
               </select>
             </div>
 
-            {/* Shortlist / Bookmark Button */}
-            <button
-              onClick={onOpenShortlist}
-              className="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-xs flex items-center gap-2 border border-slate-300 transition-all cursor-pointer"
-              title="Ver creadores guardados"
-            >
-              <Bookmark className="w-4 h-4 text-blue-600" />
-              <span className="hidden md:inline">Selección</span>
-              <span className="w-5 h-5 bg-blue-600 text-white font-black text-[11px] rounded-full flex items-center justify-center">
-                {shortlist.length}
-              </span>
-            </button>
+            {/* Shortlist / Bookmark Button - ONLY appears when at least 1 creator is selected */}
+            {shortlist.length > 0 && (
+              <button
+                onClick={onOpenShortlist}
+                className="px-3.5 py-2 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 font-extrabold text-xs flex items-center gap-1.5 border border-blue-300 transition-all cursor-pointer shadow-2xs"
+                title="Ver creadores seleccionados"
+              >
+                <Bookmark className="w-4 h-4 text-blue-600 fill-blue-600" />
+                <span className="hidden md:inline">Selección</span>
+                <span className="w-5 h-5 bg-blue-600 text-white font-black text-[11px] rounded-full flex items-center justify-center">
+                  {shortlist.length}
+                </span>
+              </button>
+            )}
 
-            {/* Service Request / Hire Button - Primary CTA at the end */}
-            <button
-              onClick={onOpenServiceRequest}
-              className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs flex items-center gap-2 shadow-md transition-all cursor-pointer whitespace-nowrap"
-            >
-              <PhoneCall className="w-4 h-4" />
-              <span>Solicitar Servicio</span>
-            </button>
+            {/* Login / Auth Icon Button at the VERY END of floating menu (Icon-Only) */}
+            {!authSession.isLoggedIn ? (
+              <button
+                onClick={onOpenAuthModal}
+                className="p-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white transition-all cursor-pointer shadow-sm border border-blue-700 flex items-center justify-center shrink-0 hover:scale-105 active:scale-95"
+                title="Iniciar Sesión / Acceso Creadores & Admin"
+              >
+                <User className="w-5 h-5" />
+              </button>
+            ) : authSession.role === 'admin' ? (
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={onOpenAdminPanel}
+                  className="p-2.5 rounded-xl bg-purple-900 hover:bg-purple-800 text-amber-300 transition-all cursor-pointer border border-purple-700 shadow-sm flex items-center justify-center"
+                  title="Panel Admin"
+                >
+                  <KeyRound className="w-5 h-5 text-amber-400" />
+                </button>
+                <button
+                  onClick={onLogout}
+                  className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer border border-slate-300"
+                  title="Cerrar Sesión"
+                >
+                  <LogOut className="w-5 h-5" />
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={onOpenPortalModal}
+                  className="p-1 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border border-emerald-400 cursor-pointer shadow-2xs flex items-center"
+                  title={`Mi Portal (${authSession.creatorProfile?.name || 'Creador'})`}
+                >
+                  <img
+                    src={authSession.creatorProfile?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'}
+                    alt="Perfil"
+                    className="w-8 h-8 rounded-lg object-cover border border-emerald-500"
+                  />
+                </button>
+                <button
+                  onClick={onLogout}
+                  className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer border border-slate-300"
+                  title="Cerrar Sesión"
+                >
+                  <LogOut className="w-5 h-5" />
+                </button>
+              </div>
+            )}
 
           </div>
 

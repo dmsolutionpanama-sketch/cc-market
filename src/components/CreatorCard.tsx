@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Creator, LanguageCode } from '../types';
-import { TrendingUp, CheckCircle2, Bookmark, Eye, Users, Percent, Volume2, Award, ShieldCheck, Flame, Star } from 'lucide-react';
+import { TrendingUp, CheckCircle2, Bookmark, Eye, Users, Percent, Volume2, Award, ShieldCheck, Flame, Star, ExternalLink, Lock, Building2 } from 'lucide-react';
 import { translations } from '../data/translations';
 
 interface CreatorCardProps {
@@ -11,6 +11,8 @@ interface CreatorCardProps {
   onToggleCompare: (creator: Creator) => void;
   isCompared: boolean;
   lang: LanguageCode;
+  isBrandValidated?: boolean;
+  onValidateBrand?: () => void;
 }
 
 export const CreatorCard: React.FC<CreatorCardProps> = ({
@@ -19,6 +21,8 @@ export const CreatorCard: React.FC<CreatorCardProps> = ({
   onToggleShortlist,
   isShortlisted,
   lang,
+  isBrandValidated = false,
+  onValidateBrand,
 }) => {
   const t = translations[lang] || translations.es;
 
@@ -80,10 +84,24 @@ export const CreatorCard: React.FC<CreatorCardProps> = ({
             </span>
           </div>
 
-          {/* Social Platform Accent Chip */}
-          <span className={`px-2.5 py-1 rounded-lg text-xs font-black uppercase tracking-wider border shadow-xs ${getPlatformStyle(creator.primaryPlatform)}`}>
-            {creator.primaryPlatform}
-          </span>
+          {/* Social Platform Accent Chip / Link (Text & Colors only) */}
+          {(() => {
+            const primaryPlatformData = creator.platforms?.find(p => p.platform === creator.primaryPlatform);
+            const primaryUrl = primaryPlatformData?.url || '#';
+            return (
+              <a
+                href={primaryUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                title={`Ir al perfil de ${creator.name} en ${creator.primaryPlatform}`}
+                className={`px-2.5 py-1 rounded-lg text-xs font-black uppercase tracking-wider border shadow-xs flex items-center gap-1 transition-transform hover:scale-105 active:scale-95 ${getPlatformStyle(creator.primaryPlatform)}`}
+              >
+                <span>{creator.primaryPlatform}</span>
+                <ExternalLink className="w-3 h-3 opacity-80" />
+              </a>
+            );
+          })()}
         </div>
 
         {/* Profile Card Body */}
@@ -149,8 +167,35 @@ export const CreatorCard: React.FC<CreatorCardProps> = ({
 
           </div>
 
-          {/* 1 to 5 Star Rating System (Evaluación por Estrellas) */}
-          <div className="mt-4 bg-amber-50/70 border border-amber-200 rounded-xl p-3">
+          {/* 1) AUDIENCIA Y MÉTRICAS PRINCIPALES */}
+          <div className="mt-4 bg-slate-900 text-white rounded-xl p-3 grid grid-cols-3 gap-2 text-center border border-slate-800">
+            {/* ACV */}
+            <div className="border-r border-slate-800 pr-1">
+              <span className="text-[10px] uppercase font-bold text-slate-400 block">Audiencia ACV</span>
+              <span className="text-sm font-black text-blue-400 font-mono mt-0.5 block">
+                {creator.acv >= 1000 ? `${(creator.acv / 1000).toFixed(1)}K` : creator.acv}
+              </span>
+            </div>
+
+            {/* Followers */}
+            <div className="border-r border-slate-800 px-1">
+              <span className="text-[10px] uppercase font-bold text-slate-400 block">Seguidores</span>
+              <span className="text-sm font-black text-white font-mono mt-0.5 block">
+                {formattedFollowers}
+              </span>
+            </div>
+
+            {/* Engagement */}
+            <div className="pl-1">
+              <span className="text-[10px] uppercase font-bold text-slate-400 block">Engagement</span>
+              <span className="text-sm font-black text-amber-400 font-mono mt-0.5 block">
+                {creator.engagementRate}%
+              </span>
+            </div>
+          </div>
+
+          {/* 2) CALIFICACIÓN POR MARCAS (1 A 5 ESTRELLAS) */}
+          <div className="mt-3 bg-amber-50/70 border border-amber-200 rounded-xl p-3">
             <div className="flex items-center justify-between gap-2 mb-1.5">
               <span className="text-xs font-black text-slate-900">
                 Calificación por Marcas:
@@ -193,42 +238,60 @@ export const CreatorCard: React.FC<CreatorCardProps> = ({
             </div>
           </div>
 
-          {/* Key Metrics Grid */}
-          <div className="mt-3 bg-slate-900 text-white rounded-xl p-3 grid grid-cols-3 gap-2 text-center border border-slate-800">
-            
-            {/* ACV */}
-            <div className="border-r border-slate-800 pr-1">
-              <span className="text-[10px] uppercase font-bold text-slate-400 block">Audiencia ACV</span>
-              <span className="text-sm font-black text-blue-400 font-mono mt-0.5 block">
-                {creator.acv >= 1000 ? `${(creator.acv / 1000).toFixed(1)}K` : creator.acv}
+          {/* 3) TARIFA OCULTA (SOLO DISPONIBLE PARA MARCAS VALIDADAS) */}
+          {isBrandValidated ? (
+            <div className="mt-3 flex items-center justify-between text-xs text-slate-700 bg-emerald-50 border border-emerald-300 rounded-xl px-3 py-2 animate-fade-in">
+              <div className="flex items-center gap-1.5 font-bold text-emerald-950">
+                <Building2 className="w-4 h-4 text-emerald-600" />
+                <span>Tarifa Post / Reel (Marca Validada):</span>
+              </div>
+              <span className="font-black text-emerald-800 font-mono text-sm bg-emerald-200/80 px-2 py-0.5 rounded">
+                ${creator.sponsorshipRates.sponsoredPost.toLocaleString()} USD
               </span>
             </div>
-
-            {/* Followers */}
-            <div className="border-r border-slate-800 px-1">
-              <span className="text-[10px] uppercase font-bold text-slate-400 block">Seguidores</span>
-              <span className="text-sm font-black text-white font-mono mt-0.5 block">
-                {formattedFollowers}
-              </span>
+          ) : (
+            <div className="mt-3 bg-slate-900 border border-slate-800 text-white rounded-xl p-3 text-center">
+              <div className="flex items-center justify-center gap-1.5 text-amber-400 font-extrabold text-xs mb-1">
+                <Lock className="w-3.5 h-3.5 text-amber-400" />
+                <span>Tarifa Oculta — Solo Marcas Validadas</span>
+              </div>
+              <p className="text-[11px] text-slate-300 font-medium mb-2 leading-tight">
+                Las tarifas están reservadas para empresas verificadas.
+              </p>
+              {onValidateBrand && (
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); onValidateBrand(); }}
+                  className="w-full py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-lg transition-all cursor-pointer shadow-xs border border-blue-400"
+                >
+                  🔓 Validar Empresa / Ver Tarifas
+                </button>
+              )}
             </div>
+          )}
 
-            {/* Engagement */}
-            <div className="pl-1">
-              <span className="text-[10px] uppercase font-bold text-slate-400 block">Engagement</span>
-              <span className="text-sm font-black text-amber-400 font-mono mt-0.5 block">
-                {creator.engagementRate}%
+          {/* 4) REDES SOCIALES AL FINAL DEL PROFILE */}
+          {creator.platforms && creator.platforms.length > 0 && (
+            <div className="mt-3 pt-3 border-t border-slate-200 flex items-center gap-1.5 flex-wrap">
+              <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-tight mr-1">
+                Redes del Creador:
               </span>
+              {creator.platforms.map((plat, pIdx) => (
+                <a
+                  key={pIdx}
+                  href={plat.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  title={`Abrir ${plat.platform}`}
+                  className={`px-2 py-0.5 rounded text-[11px] font-bold border flex items-center gap-1 transition-transform hover:scale-105 ${getPlatformStyle(plat.platform)}`}
+                >
+                  <span>{plat.platform}</span>
+                  <span className="font-mono text-[10px] opacity-90">({plat.followers})</span>
+                </a>
+              ))}
             </div>
-
-          </div>
-
-          {/* Value / Post Rate */}
-          <div className="mt-3 flex items-center justify-between text-xs text-slate-700 bg-blue-50 border border-blue-200 rounded-xl px-3 py-2">
-            <span className="font-bold text-blue-900">Tarifa Post / Reel:</span>
-            <span className="font-black text-blue-800 font-mono text-sm">
-              ${creator.sponsorshipRates.sponsoredPost.toLocaleString()} USD
-            </span>
-          </div>
+          )}
 
         </div>
       </div>
@@ -239,10 +302,11 @@ export const CreatorCard: React.FC<CreatorCardProps> = ({
           onClick={() => onViewDetails(creator)}
           className="w-full px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-extrabold transition-all shadow-md flex items-center justify-center gap-1 cursor-pointer border border-slate-300"
         >
-          <span>Ver Media Kit & Perfil</span>
+          <span>Ver Media Kit & Perfil Completo</span>
         </button>
       </div>
 
     </div>
   );
 };
+

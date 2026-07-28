@@ -229,18 +229,18 @@ export const InfiniteCreatorsCarousel: React.FC<InfiniteCreatorsCarouselProps> =
 
       </div>
 
-      {/* Mode 1: Infinite Horizontal Scrolling Carousel Container */}
+      {/* Mode 1: Infinite Horizontal Scrolling Carousel Container - Full Window Width Bleed */}
       {viewMode === 'carousel' ? (
-        <div className="relative group/carousel">
+        <div className="relative group/carousel w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden py-4 bg-slate-900/5 backdrop-blur-3xs border-y border-slate-200">
           
-          {/* Subtle Side Fade Gradients for visual elegance */}
-          <div className="absolute top-0 bottom-0 left-0 w-8 sm:w-16 bg-gradient-to-r from-slate-100 to-transparent z-10 pointer-events-none rounded-l-2xl"></div>
-          <div className="absolute top-0 bottom-0 right-0 w-8 sm:w-16 bg-gradient-to-l from-slate-100 to-transparent z-10 pointer-events-none rounded-r-2xl"></div>
+          {/* Edge Gradient Fades for depth */}
+          <div className="absolute top-0 bottom-0 left-0 w-12 sm:w-24 md:w-36 bg-gradient-to-r from-slate-100 via-slate-100/90 to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute top-0 bottom-0 right-0 w-12 sm:w-24 md:w-36 bg-gradient-to-l from-slate-100 via-slate-100/90 to-transparent z-10 pointer-events-none"></div>
 
-          {/* Manual Side Scroll Buttons Overlay */}
+          {/* Manual Side Scroll Floating Buttons */}
           <button
             onClick={() => handleManualScroll('left')}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-slate-900/90 hover:bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-xl border border-slate-700 transition-all opacity-80 hover:opacity-100 cursor-pointer"
+            className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 bg-slate-900/90 hover:bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-2xl border border-slate-700 transition-all opacity-90 hover:opacity-100 hover:scale-105 active:scale-95 cursor-pointer"
             title="Anterior"
           >
             <ChevronLeft className="w-6 h-6" />
@@ -248,24 +248,24 @@ export const InfiniteCreatorsCarousel: React.FC<InfiniteCreatorsCarouselProps> =
 
           <button
             onClick={() => handleManualScroll('right')}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-slate-900/90 hover:bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-xl border border-slate-700 transition-all opacity-80 hover:opacity-100 cursor-pointer"
+            className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 bg-slate-900/90 hover:bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-2xl border border-slate-700 transition-all opacity-90 hover:opacity-100 hover:scale-105 active:scale-95 cursor-pointer"
             title="Siguiente"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
 
-          {/* Scrollable Track */}
+          {/* Scrollable Horizontal Track across entire window */}
           <div
             ref={containerRef}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="flex items-stretch gap-5 overflow-x-auto scrollbar-none py-2 px-1 rounded-2xl scroll-smooth select-none cursor-grab active:cursor-grabbing"
+            className="flex items-stretch gap-4 sm:gap-6 overflow-x-auto scrollbar-none py-2 px-6 sm:px-12 md:px-16 scroll-smooth select-none cursor-grab active:cursor-grabbing touch-pan-x"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {loopedCreators.map((creator, index) => (
               <div 
                 key={`${creator.id}-loop-${index}`} 
-                className="w-[300px] sm:w-[350px] shrink-0 transform transition-transform hover:-translate-y-1"
+                className="w-[280px] sm:w-[330px] md:w-[360px] shrink-0 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
                 <CreatorCard
                   creator={creator}
@@ -280,10 +280,10 @@ export const InfiniteCreatorsCarousel: React.FC<InfiniteCreatorsCarouselProps> =
             ))}
           </div>
 
-          {/* Pause guidance indicator when hovered */}
+          {/* Hover Pause Toast Indicator */}
           {isHovered && isPlaying && (
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-slate-900/90 text-amber-300 px-3 py-1 rounded-full text-[11px] font-black tracking-tight z-20 border border-amber-500/40 shadow-lg pointer-events-none animate-in fade-in">
-              ⏸️ Desplazamiento pausado por puntero (pasa el cursor fuera para reanudar)
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-slate-900/90 text-amber-300 px-4 py-1.5 rounded-full text-xs font-black tracking-tight z-20 border border-amber-500/40 shadow-xl pointer-events-none animate-in fade-in">
+              ⏸️ Desplazamiento pausado al pasar el cursor (mueve fuera para reanudar)
             </div>
           )}
 
