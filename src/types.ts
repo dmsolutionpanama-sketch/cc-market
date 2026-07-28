@@ -51,9 +51,11 @@ export interface BrandReview {
 }
 
 export interface BrandRatingData {
-  trafficLight: 'green' | 'yellow' | 'red';
+  trafficLight?: 'green' | 'yellow' | 'red';
   statusText: string;
   commitmentScore: number; // e.g. 98%
+  starRating?: number; // e.g. 4.9 out of 5
+  totalReviews?: number;
   totalCampaigns: number;
   reviews: BrandReview[];
 }
@@ -106,7 +108,9 @@ export interface Creator {
   };
   mediaKitPacks?: MediaKitPackage[];
 
-  // Brand History & Rating (Semáforo)
+  // Brand History & Rating (5 Estrellas 1 a 5)
+  starRating?: number; // e.g. 4.9
+  reviewCount?: number; // e.g. 48
   brandWorkHistory?: BrandWorkHistoryItem[];
   brandRating?: BrandRatingData;
 

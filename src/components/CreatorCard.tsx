@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Creator, LanguageCode } from '../types';
-import { TrendingUp, CheckCircle2, Bookmark, Layers, Eye, Users, Percent, Volume2, Award, ShieldCheck, Flame } from 'lucide-react';
+import { TrendingUp, CheckCircle2, Bookmark, Eye, Users, Percent, Volume2, Award, ShieldCheck, Flame, Star } from 'lucide-react';
 import { translations } from '../data/translations';
 
 interface CreatorCardProps {
@@ -18,11 +18,15 @@ export const CreatorCard: React.FC<CreatorCardProps> = ({
   onViewDetails,
   onToggleShortlist,
   isShortlisted,
-  onToggleCompare,
-  isCompared,
   lang,
 }) => {
   const t = translations[lang] || translations.es;
+
+  // Rating State (1 to 5 Stars)
+  const defaultStarScore = creator.brandRating?.starRating || creator.starRating || 4.9;
+  const [currentRating, setCurrentRating] = useState<number>(defaultStarScore);
+  const [hoverRating, setHoverRating] = useState<number | null>(null);
+  const totalReviews = creator.brandRating?.totalReviews || creator.reviewCount || 24;
 
   // Social Platform Color Accent Mapping
   const getPlatformStyle = (platform: string) => {
@@ -49,29 +53,17 @@ export const CreatorCard: React.FC<CreatorCardProps> = ({
     e.stopPropagation();
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
-      const text = `${creator.name}. País: ${creator.country}. Red social principal: ${creator.primaryPlatform}. Creador verificado con ${(creator.totalFollowers / 1000000).toFixed(1)} millones de seguidores totales. Rango de edad: ${creator.ageRange || 'Joven adulto'}. Categoría: ${creator.category}.`;
+      const text = `${creator.name}. País: ${creator.country}. Red social principal: ${creator.primaryPlatform}. Calificación: ${currentRating.toFixed(1)} de 5 estrellas. ${(creator.totalFollowers / 1000000).toFixed(1)} millones de seguidores totales. Categoría: ${creator.category}.`;
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = lang === 'es' ? 'es-ES' : 'en-US';
       window.speechSynthesis.speak(utterance);
     }
   };
 
-  // Format Market Value
-  const formattedMarketValue = creator.marketValueEur >= 1000000 
-    ? `€${(creator.marketValueEur / 1000000).toFixed(1)}M`
-    : `€${(creator.marketValueEur / 1000).toFixed(0)}K`;
-
   // Format Followers
   const formattedFollowers = creator.totalFollowers >= 1000000
     ? `${(creator.totalFollowers / 1000000).toFixed(1)}M`
     : `${(creator.totalFollowers / 1000).toFixed(0)}K`;
-
-  // Traffic Light Indicator
-  const trafficLightColor = creator.brandRating?.trafficLight === 'red' 
-    ? 'bg-red-500 text-white' 
-    : creator.brandRating?.trafficLight === 'yellow'
-    ? 'bg-amber-400 text-slate-950'
-    : 'bg-blue-600 text-white font-black';
 
   return (
     <div className="group bg-white rounded-2xl border-2 border-slate-300 hover:border-blue-500 shadow-xs hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between">
@@ -132,7 +124,7 @@ export const CreatorCard: React.FC<CreatorCardProps> = ({
               </div>
             </div>
 
-            {/* Audio Button for Visually Impaired Users & Shortlist */}
+            {/* Audio Button & Shortlist */}
             <div className="flex items-center gap-1">
               <button
                 onClick={speakCreatorInfo}
@@ -157,17 +149,48 @@ export const CreatorCard: React.FC<CreatorCardProps> = ({
 
           </div>
 
-          {/* Brand Rating Traffic Light Badge (Semáforo) */}
-          <div className="mt-4 bg-slate-50 border border-slate-300 rounded-xl p-3 flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <span className={`w-3 h-3 rounded-full ${creator.brandRating?.trafficLight === 'green' ? 'bg-blue-600 animate-pulse' : 'bg-amber-400'}`}></span>
-              <span className="text-xs font-extrabold text-slate-800">
-                Valoración Marcas:
+          {/* 1 to 5 Star Rating System (Evaluación por Estrellas) */}
+          <div className="mt-4 bg-amber-50/70 border border-amber-200 rounded-xl p-3">
+            <div className="flex items-center justify-between gap-2 mb-1.5">
+              <span className="text-xs font-black text-slate-900">
+                Calificación por Marcas:
+              </span>
+              <span className="text-xs font-black text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md font-mono border border-amber-200">
+                {(hoverRating || currentRating).toFixed(1)} / 5.0
               </span>
             </div>
-            <span className={`px-2.5 py-0.5 rounded-full text-xs font-extrabold shadow-2xs ${trafficLightColor}`}>
-              {creator.brandRating?.trafficLight === 'green' ? '🔵 100% Cumplimiento' : '🟡 Aceptable'}
-            </span>
+
+            {/* Interactive 5 Star Selector */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1">
+                {[1, 2, 3, 4, 5].map((starIndex) => {
+                  const activeStar = (hoverRating || currentRating) >= starIndex;
+                  return (
+                    <button
+                      key={starIndex}
+                      type="button"
+                      onMouseEnter={() => setHoverRating(starIndex)}
+                      onMouseLeave={() => setHoverRating(null)}
+                      onClick={() => setCurrentRating(starIndex)}
+                      className="cursor-pointer transition-transform hover:scale-125 p-0.5 focus:outline-none"
+                      title={`Calificar con ${starIndex} estrellas`}
+                    >
+                      <Star
+                        className={`w-5 h-5 ${
+                          activeStar
+                            ? 'text-amber-500 fill-amber-400'
+                            : 'text-slate-300 fill-slate-100'
+                        }`}
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+
+              <span className="text-[11px] font-bold text-slate-500">
+                ({totalReviews} evaluaciones)
+              </span>
+            </div>
           </div>
 
           {/* Key Metrics Grid */}
@@ -213,20 +236,8 @@ export const CreatorCard: React.FC<CreatorCardProps> = ({
       {/* Footer Actions */}
       <div className="px-4 py-3 bg-slate-100 border-t border-slate-300 flex items-center justify-between gap-2">
         <button
-          onClick={() => onToggleCompare(creator)}
-          className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${
-            isCompared
-              ? 'bg-slate-900 text-white'
-              : 'bg-white text-slate-800 border border-slate-300 hover:bg-slate-200'
-          }`}
-        >
-          <Layers className="w-3.5 h-3.5" />
-          <span>{isCompared ? 'Comparando' : 'Comparar'}</span>
-        </button>
-
-        <button
           onClick={() => onViewDetails(creator)}
-          className="flex-1 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-extrabold transition-all shadow-md flex items-center justify-center gap-1 cursor-pointer border border-slate-300"
+          className="w-full px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-extrabold transition-all shadow-md flex items-center justify-center gap-1 cursor-pointer border border-slate-300"
         >
           <span>Ver Media Kit & Perfil</span>
         </button>

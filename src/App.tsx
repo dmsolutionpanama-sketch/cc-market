@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Header } from './components/Header';
+import { Header, SectionType } from './components/Header';
 import { HeroSearch } from './components/HeroSearch';
 import { AdvancedFilters } from './components/AdvancedFilters';
 import { PartnersBanner } from './components/PartnersBanner';
@@ -13,8 +13,9 @@ import { ComparisonDrawer } from './components/ComparisonDrawer';
 import { ShortlistModal } from './components/ShortlistModal';
 import { creatorsMockData } from './data/creators';
 import { Creator, FilterState, LanguageCode } from './types';
-import { Search, Sparkles, FilterX, BarChart3, ShieldCheck, ArrowUpDown, Lock, Eye, CheckCircle2 } from 'lucide-react';
+import { Search, Sparkles, FilterX, ShieldCheck, Lock, Eye, TrendingUp, Newspaper, Award, Building2 } from 'lucide-react';
 import { translations } from './data/translations';
+import { sanitizeInput } from './utils/security';
 
 const initialFilterState: FilterState = {
   searchQuery: '',
@@ -38,6 +39,9 @@ export default function App() {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [isListRevealed, setIsListRevealed] = useState(false);
   
+  // Active Section for In-Page Navigation (_self)
+  const [activeSection, setActiveSection] = useState<SectionType>('catalog');
+
   // Modals & Drawers state
   const [selectedCreator, setSelectedCreator] = useState<Creator | null>(null);
   const [shortlist, setShortlist] = useState<Creator[]>([]);
@@ -62,6 +66,10 @@ export default function App() {
   }, [filters]);
 
   const handleFilterChange = (newFilters: Partial<FilterState>) => {
+    // Sanitize search query string if present
+    if (newFilters.searchQuery !== undefined) {
+      newFilters.searchQuery = sanitizeInput(newFilters.searchQuery, 100);
+    }
     setFilters((prev) => ({ ...prev, ...newFilters }));
   };
 
@@ -205,160 +213,190 @@ export default function App() {
     }
   };
 
+  // Render Catalog Content Block
+  const renderCatalogContent = () => (
+    <div>
+      {/* Results Controls Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-300">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+            <span>Catálogo de Creadores Auditados</span>
+            {shouldDisplayList && (
+              <span className="text-xs bg-blue-100 text-blue-800 font-bold px-2.5 py-0.5 rounded-full border border-blue-200">
+                {filteredCreators.length} resultados
+              </span>
+            )}
+          </h2>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Métricas de audiencia en vivo, engagement verificado y semáforo de cumplimiento comercial.
+          </p>
+        </div>
+
+        {shouldDisplayList && (
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-slate-500 font-semibold">Ordenar por:</span>
+            <select
+              value={filters.sortBy}
+              onChange={(e) => handleFilterChange({ sortBy: e.target.value as FilterState['sortBy'] })}
+              className="bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-800 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            >
+              <option value="marketValue">Mayor Valor de Mercado (€)</option>
+              <option value="acv">Mayor Audiencia Media (ACV)</option>
+              <option value="followers">Seguidores Totales</option>
+              <option value="engagement">Engagement Rate (%)</option>
+              <option value="name">Nombre</option>
+            </select>
+          </div>
+        )}
+      </div>
+
+      {/* Hidden List Locked Prompt or Active Grid */}
+      {!shouldDisplayList ? (
+        <div className="bg-white rounded-3xl border-2 border-dashed border-slate-300 p-8 sm:p-12 text-center max-w-2xl mx-auto my-6 shadow-xs">
+          <div className="w-20 h-20 bg-slate-100 rounded-3xl flex items-center justify-center mx-auto mb-4 text-blue-600 shadow-inner border border-slate-200">
+            <Lock className="w-10 h-10" />
+          </div>
+
+          <h3 className="font-extrabold text-slate-900 text-xl sm:text-2xl tracking-tight">
+            Listado de Creadores Oculto
+          </h3>
+
+          <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed max-w-md mx-auto">
+            Escribe el nombre de un creador en el buscador o activa la exploración completa para ver todos los perfiles auditados.
+          </p>
+
+          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <button
+              onClick={() => setIsListRevealed(true)}
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md transition-all cursor-pointer flex items-center gap-2 border border-slate-300"
+            >
+              <Eye className="w-4 h-4" />
+              <span>{t.exploreAll} ({creatorsMockData.length} Creadores)</span>
+            </button>
+          </div>
+        </div>
+      ) : filteredCreators.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredCreators.map((creator) => (
+            <CreatorCard
+              key={creator.id}
+              creator={creator}
+              onViewDetails={(c) => setSelectedCreator(c)}
+              onToggleShortlist={handleToggleShortlist}
+              isShortlisted={shortlist.some((s) => s.id === creator.id)}
+              onToggleCompare={handleToggleCompare}
+              isCompared={comparisonList.some((c) => c.id === creator.id)}
+              lang={lang}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="bg-white rounded-2xl border border-slate-300 p-12 text-center max-w-lg mx-auto my-8 shadow-xs">
+          <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400 border border-slate-200">
+            <FilterX className="w-8 h-8" />
+          </div>
+          <h3 className="font-extrabold text-slate-900 text-lg">No se encontraron creadores</h3>
+          <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+            No hay resultados que coincidan exactamente con tu búsqueda. Prueba con otros filtros o explora la lista completa.
+          </p>
+          <button
+            onClick={handleResetFilters}
+            className="mt-5 px-4 py-2.5 bg-slate-900 text-white font-bold text-xs rounded-xl hover:bg-slate-800 transition-colors cursor-pointer border border-slate-700"
+          >
+            Restablecer Filtros
+          </button>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 flex flex-col selection:bg-blue-600 selection:text-white">
       
-      {/* Header with Navigation & Language Selector */}
+      {/* Header with Navigation Menu (_self Navigation) */}
       <Header
         shortlist={shortlist}
         comparisonList={comparisonList}
         onOpenShortlist={() => setIsShortlistOpen(true)}
         onOpenComparison={() => setIsComparisonOpen(true)}
         onOpenServiceRequest={() => setIsServiceRequestOpen(true)}
+        activeSection={activeSection}
+        onSelectSection={(sec) => {
+          setActiveSection(sec);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
         lang={lang}
         onLangChange={setLang}
         totalCreatorsCount={creatorsMockData.length}
       />
 
-      {/* 1. Search */}
-      <HeroSearch
-        filters={filters}
-        onFilterChange={handleFilterChange}
-        onResetFilters={handleResetFilters}
-        showAdvancedFilters={showAdvancedFilters}
-        onToggleAdvancedFilters={() => setShowAdvancedFilters(!showAdvancedFilters)}
-        activeFilterCount={activeFilterCount}
-        totalResults={filteredCreators.length}
-        isListRevealed={isListRevealed}
-        onRevealListToggle={() => setIsListRevealed(!isListRevealed)}
-        lang={lang}
-      />
-
-      {/* Advanced Filters Panel */}
-      <AdvancedFilters
-        filters={filters}
-        onFilterChange={handleFilterChange}
-        onResetFilters={handleResetFilters}
-        isOpen={showAdvancedFilters}
-        lang={lang}
-      />
-
-      {/* 2. Catálogo de Creadores Auditados */}
-      <main id="catalog" className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      {/* Main Container - Renders Active Section Inline (_self Page View) */}
+      <main className="flex-1 flex flex-col">
         
-        {/* Results Controls Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-300">
-          <div>
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-              <span>Catálogo de Creadores Auditados</span>
-              {shouldDisplayList && (
-                <span className="text-xs bg-blue-100 text-blue-800 font-bold px-2.5 py-0.5 rounded-full border border-blue-200">
-                  {filteredCreators.length} resultados
-                </span>
-              )}
-            </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Métricas de audiencia en vivo, engagement verificado y semáforo de cumplimiento comercial.
-            </p>
-          </div>
+        {/* Search Engine & Filters (Visible on Catalog and Trending views) */}
+        {(activeSection === 'catalog' || activeSection === 'trending') && (
+          <>
+            <HeroSearch
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              onResetFilters={handleResetFilters}
+              showAdvancedFilters={showAdvancedFilters}
+              onToggleAdvancedFilters={() => setShowAdvancedFilters(!showAdvancedFilters)}
+              activeFilterCount={activeFilterCount}
+              totalResults={filteredCreators.length}
+              isListRevealed={isListRevealed}
+              onRevealListToggle={() => setIsListRevealed(!isListRevealed)}
+              lang={lang}
+            />
 
-          {shouldDisplayList && (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-500 font-semibold">Ordenar por:</span>
-              <select
-                value={filters.sortBy}
-                onChange={(e) => handleFilterChange({ sortBy: e.target.value as FilterState['sortBy'] })}
-                className="bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-800 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              >
-                <option value="marketValue">Mayor Valor de Mercado (€)</option>
-                <option value="acv">Mayor Audiencia Media (ACV)</option>
-                <option value="followers">Seguidores Totales</option>
-                <option value="engagement">Engagement Rate (%)</option>
-                <option value="name">Nombre</option>
-              </select>
+            <AdvancedFilters
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              onResetFilters={handleResetFilters}
+              isOpen={showAdvancedFilters}
+              lang={lang}
+            />
+          </>
+        )}
+
+        {/* Section View Routing (_self) */}
+        <div className="flex-1">
+          {activeSection === 'catalog' && (
+            <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              {renderCatalogContent()}
+            </div>
+          )}
+
+          {activeSection === 'trending' && (
+            <TrendingCreatorsSection
+              creators={creatorsMockData}
+              onSelectCreator={(c) => setSelectedCreator(c)}
+              lang={lang}
+            />
+          )}
+
+          {activeSection === 'news' && (
+            <NewsSection
+              lang={lang}
+              onSelectCreatorByName={(name) => handleSelectCreatorByName(name)}
+            />
+          )}
+
+          {activeSection === 'ranking' && (
+            <TopRankingSection
+              creators={creatorsMockData}
+              onSelectCreator={(c) => setSelectedCreator(c)}
+              lang={lang}
+            />
+          )}
+
+          {activeSection === 'partners' && (
+            <div className="py-12 bg-white">
+              <PartnersBanner lang={lang} />
             </div>
           )}
         </div>
-
-        {/* Hidden List Locked Prompt or Active Grid */}
-        {!shouldDisplayList ? (
-          <div className="bg-white rounded-3xl border-2 border-dashed border-slate-300 p-8 sm:p-12 text-center max-w-2xl mx-auto my-6 shadow-xs">
-            <div className="w-20 h-20 bg-slate-100 rounded-3xl flex items-center justify-center mx-auto mb-4 text-blue-600 shadow-inner border border-slate-200">
-              <Lock className="w-10 h-10" />
-            </div>
-
-            <h3 className="font-extrabold text-slate-900 text-xl sm:text-2xl tracking-tight">
-              Listado de Creadores Oculto
-            </h3>
-
-            <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed max-w-md mx-auto">
-              Escribe el nombre de un creador en el buscador superior o activa la exploración completa para ver todos los perfiles.
-            </p>
-
-            <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <button
-                onClick={() => setIsListRevealed(true)}
-                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md transition-all cursor-pointer flex items-center gap-2 border border-slate-300"
-              >
-                <Eye className="w-4 h-4" />
-                <span>{t.exploreAll} ({creatorsMockData.length} Creadores)</span>
-              </button>
-            </div>
-          </div>
-        ) : filteredCreators.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCreators.map((creator) => (
-              <CreatorCard
-                key={creator.id}
-                creator={creator}
-                onViewDetails={(c) => setSelectedCreator(c)}
-                onToggleShortlist={handleToggleShortlist}
-                isShortlisted={shortlist.some((s) => s.id === creator.id)}
-                onToggleCompare={handleToggleCompare}
-                isCompared={comparisonList.some((c) => c.id === creator.id)}
-                lang={lang}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="bg-white rounded-2xl border border-slate-300 p-12 text-center max-w-lg mx-auto my-8 shadow-xs">
-            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400 border border-slate-200">
-              <FilterX className="w-8 h-8" />
-            </div>
-            <h3 className="font-extrabold text-slate-900 text-lg">No se encontraron creadores</h3>
-            <p className="text-xs text-slate-500 mt-2 leading-relaxed">
-              No hay resultados que coincidan exactamente con tu búsqueda. Prueba con otros filtros o explora la lista completa.
-            </p>
-            <button
-              onClick={handleResetFilters}
-              className="mt-5 px-4 py-2.5 bg-slate-900 text-white font-bold text-xs rounded-xl hover:bg-slate-800 transition-colors cursor-pointer border border-slate-700"
-            >
-              Restablecer Filtros
-            </button>
-          </div>
-        )}
-
       </main>
-
-      {/* 3. Creadores Referidos por Publicaciones Virales & Redes */}
-      <TrendingCreatorsSection
-        creators={creatorsMockData}
-        onSelectCreator={(c) => setSelectedCreator(c)}
-        lang={lang}
-      />
-
-      {/* 4. Tendencias del Mercado & Casos de Éxito de Marcas */}
-      <NewsSection
-        lang={lang}
-        onSelectCreatorByName={handleSelectCreatorByName}
-      />
-
-      {/* 5. Líderes de Mercado y Métricas Auditadas 2026 */}
-      <TopRankingSection
-        creators={creatorsMockData}
-        onSelectCreator={(c) => setSelectedCreator(c)}
-        lang={lang}
-      />
 
       {/* Creator Detail Modal */}
       <CreatorDetailModal
@@ -398,11 +436,8 @@ export default function App() {
         onClearShortlist={() => setShortlist([])}
       />
 
-      {/* Marcas Patrocinadoras Carousel (en el Footer) */}
-      <PartnersBanner lang={lang} />
-
-      {/* Footer */}
-      <footer className="bg-white text-slate-600 border-t border-slate-300 py-12 px-4 sm:px-6 lg:px-8 text-xs">
+      {/* Security Protection Footer */}
+      <footer className="bg-white text-slate-600 border-t border-slate-300 py-10 px-4 sm:px-6 lg:px-8 text-xs">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white font-black flex items-center justify-center text-xl shadow-md border border-blue-500">
@@ -416,12 +451,17 @@ export default function App() {
             </div>
           </div>
 
-          <div className="flex items-center gap-6 text-slate-700 font-bold flex-wrap justify-center">
-            <a href="#catalog" className="hover:text-blue-600 transition-colors">Catálogo</a>
-            <a href="#trending" className="hover:text-blue-600 transition-colors">Virales & Redes</a>
-            <a href="#news" className="hover:text-blue-600 transition-colors">Tendencias & Noticias</a>
-            <a href="#ranking" className="hover:text-blue-600 transition-colors">Líderes de Mercado</a>
-            <a href="#partners" className="hover:text-blue-600 transition-colors">Patrocinadores</a>
+          <div className="flex items-center gap-2 text-emerald-800 bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-200 text-xs font-bold">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>Seguridad Verificada: Protección contra XSS, sanitización de datos & encriptación SSL.</span>
+          </div>
+
+          <div className="flex items-center gap-4 text-slate-700 font-bold flex-wrap justify-center">
+            <button onClick={() => { setActiveSection('catalog'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-blue-600 transition-colors cursor-pointer">Catálogo</button>
+            <button onClick={() => { setActiveSection('trending'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-blue-600 transition-colors cursor-pointer">Virales & Redes</button>
+            <button onClick={() => { setActiveSection('news'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-blue-600 transition-colors cursor-pointer">Noticias</button>
+            <button onClick={() => { setActiveSection('ranking'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-blue-600 transition-colors cursor-pointer">Líderes</button>
+            <button onClick={() => { setActiveSection('partners'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-blue-600 transition-colors cursor-pointer">Patrocinadores</button>
           </div>
         </div>
       </footer>
@@ -429,3 +469,4 @@ export default function App() {
     </div>
   );
 }
+

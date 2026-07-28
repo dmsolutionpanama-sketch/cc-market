@@ -34,7 +34,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
 
   return (
     <section id="search" className="relative pt-10 pb-8 px-4 sm:px-6 lg:px-8 bg-white text-slate-900 border-b border-slate-300">
-      <div className="max-w-4xl mx-auto text-center">
+      <div className="max-w-5xl mx-auto text-center">
         
         {/* Subtle Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-900 text-xs font-extrabold mb-4 shadow-xs">
@@ -48,14 +48,14 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
         </h1>
         
         {/* Subtitle */}
-        <p className="mt-3 text-slate-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-normal">
-          {t.tagline} • Encuentra datos de audiencias, valor de mercado, tarifario de media kits y valoración por marcas.
+        <p className="mt-3 text-slate-600 text-sm sm:text-base max-w-3xl mx-auto leading-relaxed font-normal">
+          {t.tagline} • Encuentra datos de audiencias, valor de mercado, tarifario de media kits y evaluación de marcas.
         </p>
 
-        {/* Search Bar Box */}
-        <div className="mt-8 relative max-w-3xl mx-auto">
-          <div className="relative flex items-center shadow-lg rounded-2xl bg-white border-2 border-blue-500 p-2 transition-all focus-within:border-blue-600 focus-within:ring-4 focus-within:ring-blue-500/10">
-            <div className="pl-3.5 pr-2 text-blue-600">
+        {/* Search Bar Box - Expanded Width */}
+        <div className="mt-8 relative w-full max-w-5xl mx-auto">
+          <div className="relative flex items-center shadow-lg rounded-2xl bg-white border-2 border-blue-500 p-2.5 transition-all focus-within:border-blue-600 focus-within:ring-4 focus-within:ring-blue-500/10">
+            <div className="pl-3.5 pr-2 text-blue-600 shrink-0">
               <Search className="w-6 h-6" />
             </div>
             
