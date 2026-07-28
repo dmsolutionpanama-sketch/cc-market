@@ -1,0 +1,6 @@
+{
+  "name": "CC-Market",
+  "description": "Plataforma de Creadores de Contenido (CC-Market) con análisis de métricas, media kits, valoración por marcas y comunicación.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
